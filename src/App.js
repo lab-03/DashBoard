@@ -58,13 +58,11 @@ class App extends Component {
       body: JSON.stringify({
         longitude: "10.807222",
         latitude: "-90.984722",
-        hash: "HASDIONJifbw39e8das"
+        hash: "#HASDIONJifbw39edsa8dasffsd"
       })
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response);
-        console.log(response.data);
         this.setState({ imageUrl: response.data });
       })
       .catch(err => console.log(err));
