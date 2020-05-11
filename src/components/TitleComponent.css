@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap");
+
+h1 {
+  font-size: 100px;
+  text-align: center;
+  font-family: "Cairo", sans-serif;
+  line-height: 1;
+  color: white;
+  text-shadow: 2px 2px 1px rgb(0, 0, 0);
+}

@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import HomePage from "./components/homepage";
 import CourseStatPage from "./components/courseStatPage";
 import Qr from "./components/qrpage";
+
 function App() {
   return (
     <Switch>
