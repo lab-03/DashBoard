@@ -7,6 +7,8 @@ import Title from "./TitleComponent";
 import { withStyles } from "@material-ui/core/styles";
 import Logos from "./logos";
 import SignUp from "./signup";
+import { toast } from "react-toastify";
+import { PlacesAirportShuttle } from "material-ui/svg-icons";
 let backStyle = {
   backgroundImage: `url(${background})`,
   height: "1340px",
@@ -32,7 +34,7 @@ const styles = {
     color: "white",
   },
 };
-const Signin = () => {
+const Signin = (props) => {
   const [info, setInfo] = useState({
     Email: "",
     Password: "",
@@ -42,7 +44,8 @@ const Signin = () => {
     setInfo(updatedInfo);
   };
   const ButtonHandler = () => {
-    window.location = "http://localhost:3000/home";
+    props.history.push("/home");
+    toast.success(`Welcome ${info.Email} ! `);
   };
   return (
     <div style={backStyle}>
