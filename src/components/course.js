@@ -6,13 +6,13 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Button,
-  Divider,
+  Divider
 } from "@material-ui/core";
 
 const Course = ({ id, title, history }) => {
   const [state, setState] = React.useState({
     imageUrl: "",
-    hash: crypto.randomBytes(20).toString("hex"),
+    hash: crypto.randomBytes(20).toString("hex")
   });
   const createQrCode = () => {
     const { hash } = state;
@@ -28,18 +28,29 @@ const Course = ({ id, title, history }) => {
       body: JSON.stringify({
         hash,
         longitude: "30.2262612",
-        latitude: "80.2262612",
-      }),
+        latitude: "80.2262612"
+      })
     })
-      .then((response) => response.json())
-      .then((response) => {
+      .then(response => response.json())
+      .then(response => {
         console.log(response);
         setState({ ...state, imageUrl: response.data });
-        history.push(`/home/qr/${id}/${state.imageUrl}/${hash}`);
+
+        // let find = "//";
+        // let re = new RegExp(find);
+        // response.data = response.data.replace(re, "%2f");
+        let x = "";
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i] === "/") x += "%2f";
+          else x += response.data[i];
+        }
+
+        console.log({ imgUrl: response.data, hash });
+        history.push(`/home/qr/${id}/${x}/${hash}`);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
-        //history.push(`/home/qr/${id}/henaelurl/${hash}`);
+        history.push(`/home/qr/${id}/henaelurl/${hash}`);
       });
     // }
   };

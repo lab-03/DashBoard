@@ -3,7 +3,10 @@ import "./QrCode.css";
 import DashBoard from "./DashBoard";
 import { Button } from "@material-ui/core";
 
-const QrCode = ({ imageUrl, hash }) => {
+const QrCode = props => {
+  let { imageUrl, hash } = props.match.params;
+  console.log(props.match.params);
+  console.log({ imageUrl, hash });
   const [state, setState] = React.useState({
     hide: false
   });

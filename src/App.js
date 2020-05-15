@@ -23,7 +23,7 @@ function App() {
   return (
     <Switch>
       <Route
-        path="/home/qr/:id/:imageURl/:hash"
+        path="/home/qr/:id/:imageUrl/:hash"
         imageUrl={course.imageUrl}
         hash={course.hash}
         component={QrCode}
