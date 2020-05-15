@@ -9,53 +9,56 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField
+  TextField,
 } from "@material-ui/core";
 
-const Courses = () => {
+const Courses = (props) => {
   const [state, setState] = React.useState({
     courses: [
       {
         title: "Introduction to CS",
-        id: "CS-123"
+        id: "CS-123",
       },
       {
         title: "ML",
-        id: "CS-255"
+        id: "CS-255",
       },
       {
         title: "OOP",
-        id: "CS-124"
-      }
+        id: "CS-124",
+      },
     ],
     newCourse: {
       title: "",
-      id: ""
+      id: "",
     },
-    openDialog: false
+    openDialog: false,
   });
   const handleClickOpen = () => {
     setState({ ...state, openDialog: true });
   };
   const handleClose = () => {
     setState({ ...state, openDialog: false });
-    setState({ ...state, newCourse: { title: "", id: "" } });
-    console.log(state);
   };
   const handleSubmit = () => {
-    handleClose();
     const { courses, newCourse } = state;
     let newCourses = courses;
     newCourses.push(newCourse);
+    console.log(newCourse);
     setState({ ...state, courses: newCourses });
     setState({ ...state, newCourse: { title: "", id: "" } });
+    handleClose();
+
+    console.log(state.courses);
   };
-  const onChange = (key, value) => {
-    let newCourse = state.newCourse;
-    newCourse[key] = value;
-    console.log(newCourse);
-    setState({ ...state, newCourse });
+  const newCourseHandler = (e) => {
+    let target = e.target.name;
+    const prevv = state.newCourse;
+    prevv[target] = e.target.value;
+    const updated = { ...state, newCourse: prevv };
+    setState(updated);
   };
+
   const { openDialog } = state;
   return (
     <div className="center">
@@ -63,7 +66,14 @@ const Courses = () => {
         <h3 variant="h6">My Courses</h3>
         <div>
           <List>
-            <Course id={1} title={"OOP"} />
+            {state.courses.map((course) => (
+              <Course
+                key={course.id}
+                id={course.id}
+                title={course.title}
+                history={props.history}
+              />
+            ))}
           </List>
           <Button
             className="shadow grow ma5"
@@ -94,30 +104,26 @@ const Courses = () => {
               label="Title"
               name="title"
               type="text"
-              value="ay haga"
+              value={state.newCourse.title}
               required
               fullWidth
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
-              onChange={event => {
-                onChange("title", event.target.value);
-              }}
+              onChange={newCourseHandler}
             />
             <TextField
               margin="dense"
               name="id"
               label="ID"
               type="text"
-              value="ay haga"
+              value={state.newCourse.id}
               fullWidth
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               required
-              onChange={event => {
-                onChange("id", event.target.value);
-              }}
+              onChange={newCourseHandler}
             />
           </div>
         </DialogContent>

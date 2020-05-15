@@ -6,13 +6,13 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Button,
-  Divider
+  Divider,
 } from "@material-ui/core";
 
-const Course = ({ id, title }) => {
+const Course = ({ id, title, history }) => {
   const [state, setState] = React.useState({
     imageUrl: "",
-    hash: crypto.randomBytes(20).toString("hex")
+    hash: crypto.randomBytes(20).toString("hex"),
   });
   const createQrCode = () => {
     const { hash } = state;
@@ -28,18 +28,21 @@ const Course = ({ id, title }) => {
       body: JSON.stringify({
         hash,
         longitude: "30.2262612",
-        latitude: "80.2262612"
-      })
+        latitude: "80.2262612",
+      }),
     })
-      .then(response => response.json())
-      .then(response => {
+      .then((response) => response.json())
+      .then((response) => {
         console.log(response);
         setState({ ...state, imageUrl: response.data });
+        history.push(`/home/qr/${id}/${state.imageUrl}/${hash}`);
       })
-      .catch(err => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        //history.push(`/home/qr/${id}/henaelurl/${hash}`);
+      });
     // }
   };
-  const { hash, imageUrl } = state;
 
   return (
     <Fragment>
@@ -57,18 +60,16 @@ const Course = ({ id, title }) => {
             </Button>
           </Link>
           <span className="ma2"></span>
-          <Link to={`/home/qr/${id}/${imageUrl}/${hash}`}>
-            {console.log({ hash, imageUrl })}
-            <Button
-              className="shadow grow"
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={createQrCode}
-            >
-              <p className="fw7-ns">GenerateQrCode</p>
-            </Button>
-          </Link>
+
+          <Button
+            className="shadow grow"
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={createQrCode}
+          >
+            <p className="fw7-ns">GenerateQrCode</p>
+          </Button>
         </ListItemSecondaryAction>
       </ListItem>
       <Divider />
