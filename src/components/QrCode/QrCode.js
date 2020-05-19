@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import "./QrCode.css";
-import DashBoard from "./DashBoard";
+import DashBoard from "../DashBoard/DashBoard";
 import { Button } from "@material-ui/core";
 
 const QrCode = props => {
@@ -8,6 +8,8 @@ const QrCode = props => {
   console.log(props.match.params);
   console.log({ imageUrl, hash });
   const [state, setState] = React.useState({
+    imageUrl,
+    hash,
     hide: false
   });
   const endQrCode = hash => {

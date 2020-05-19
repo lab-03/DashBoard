@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
-import background from "../background.jpg";
-import Title from "./TitleComponent";
+import background from "../../background.jpg";
+import Title from "../TitleComponent/TitleComponent";
 import { withStyles } from "@material-ui/core/styles";
-import Logos from "./logos";
-import SignUp from "./signup";
+import Logos from "../logos/logos";
+import SignUp from "../signup/signup";
 import { toast } from "react-toastify";
-import { PlacesAirportShuttle } from "material-ui/svg-icons";
+// import { PlacesAirportShuttle } from "material-ui/svg-icons";
 let backStyle = {
   backgroundImage: `url(${background})`,
   height: "1340px",
   backgroundSize: "cover",
   backgroundPosition: "center",
-  backgroundAttachment: "fixed",
+  backgroundAttachment: "fixed"
 };
 let stylee = {
-  marginLeft: 793,
+  marginLeft: 793
 };
 let layer = {
   backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -26,20 +26,20 @@ let layer = {
   left: 0,
   width: "100%",
   height: "1340px",
-  backgroundAttachment: "fixed",
+  backgroundAttachment: "fixed"
 };
 
 const styles = {
   input: {
-    color: "white",
-  },
+    color: "white"
+  }
 };
-const Signin = (props) => {
+const Signin = props => {
   const [info, setInfo] = useState({
     Email: "",
-    Password: "",
+    Password: ""
   });
-  const InfoHandler = (e) => {
+  const InfoHandler = e => {
     const updatedInfo = { ...info, [e.target.name]: e.target.value };
     setInfo(updatedInfo);
   };
@@ -87,7 +87,7 @@ const Signin = (props) => {
           style={{
             backgroundColor: "rgb(255,255,255,0.8)",
             backgroundSize: "auto",
-            borderRadius: "130px",
+            borderRadius: "130px"
           }}
         >
           <SignUp />
@@ -98,6 +98,6 @@ const Signin = (props) => {
 };
 
 const style = {
-  margin: 15,
+  margin: 15
 };
 export default withStyles(styles)(Signin);
