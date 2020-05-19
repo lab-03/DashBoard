@@ -70,7 +70,7 @@ const Courses = props => {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          hash: "a",
+          hash,
           longitude,
           latitude
         })
