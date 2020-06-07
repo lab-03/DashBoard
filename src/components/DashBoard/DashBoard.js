@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MaterialTable from "material-table";
 import { Grid } from "@material-ui/core";
+import socketIO from "socket.io-client";
 
-export default function DashBoard() {
+const DashBoard = ({ hash }) => {
   const [state, setState] = React.useState({
+    hash,
     columns: [
       { title: "Name", field: "name" },
-      { title: "ID", field: "ID", type: "numeric" },
+      { title: "ID", field: "id", type: "numeric" },
       { title: "FR Score", field: "FRScore", type: "numeric" }
     ],
-    data: [
-      { name: "Test", ID: "20160001", FRScore: 82 },
-      {
-        name: "Potato",
-        ID: "20160002",
-        FRScore: 82
-      }
-    ]
+    data: [],
+    socket: socketIO.connect("http://localhost:8888"),
+    listening: false
   });
-
+  useEffect(() => {
+    let { listening } = state;
+    if (!listening) {
+      state.socket
+        .on("connect", () => {
+          console.log("Socket Connected");
+        })
+        .on(hash, newAttendee => {
+          console.log({ hash, newAttendee });
+          setState(prevState => {
+            const data = [...prevState.data];
+            data.push(newAttendee);
+            return { ...prevState, data };
+          });
+        });
+      setState({ ...state, listening: true });
+    }
+  }, [state, hash]);
   return (
     <div className="center">
       <Grid item xs={12} md={9}>
@@ -68,4 +82,6 @@ export default function DashBoard() {
       </Grid>
     </div>
   );
-}
+};
+
+export default DashBoard;

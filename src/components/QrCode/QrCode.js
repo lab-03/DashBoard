@@ -13,7 +13,7 @@ const QrCode = props => {
     hide: false
   });
   const endQrCode = hash => {
-    fetch("http://localhost:5000/api/qrcodes/end", {
+    fetch("http://localhost:8888/api/qrcodes/end", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -54,7 +54,7 @@ const QrCode = props => {
         </Fragment>
       ) : null}
       <div>
-        <DashBoard />
+        <DashBoard hash={hash} />
       </div>
       {hide ? (
         <div className="center ma3 flex justify-around">

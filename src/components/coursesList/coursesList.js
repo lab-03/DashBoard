@@ -66,9 +66,11 @@ const Courses = props => {
         "You must allow access to your location in order to generate a valid QrCode"
       );
     } else {
-      fetch("http://localhost:5000/api/qrcodes/create", {
+      fetch("http://localhost:8888/api/qrcodes/create", {
         method: "post",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           hash,
           longitude,
