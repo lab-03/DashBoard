@@ -12,15 +12,16 @@ const DashBoard = ({ hash }) => {
       { title: "FR Score", field: "FRScore", type: "numeric" }
     ],
     data: [],
-    socket: socketIO.connect("http://localhost:8888"),
     listening: false
   });
   useEffect(() => {
     let { listening } = state;
-    if (!listening) {
-      state.socket
+    if (listening === false) {
+      let socket = socketIO.connect("http://localhost:8888");
+      socket
         .on("connect", () => {
           console.log("Socket Connected");
+          console.log(socket.id);
         })
         .on(hash, newAttendee => {
           console.log({ hash, newAttendee });
@@ -29,6 +30,12 @@ const DashBoard = ({ hash }) => {
             data.push(newAttendee);
             return { ...prevState, data };
           });
+        })
+        .on("disconnect", () => {
+          // if (msg === "disconnecting") {
+          console.log("server disconnected");
+          setState({ ...state, listening: -1 });
+          // }
         });
       setState({ ...state, listening: true });
     }
