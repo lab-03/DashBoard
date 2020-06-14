@@ -45,8 +45,9 @@ const Courses = props => {
     }
     if (location) {
       location.getCurrentPosition(function(position) {
-        longitude = position.coords.longitude.toFixed(7);
-        latitude = position.coords.latitude.toFixed(7);
+        longitude = position.coords.longitude;
+        latitude = position.coords.latitude;
+        console.log({ latitude, longitude });
         setState({ ...state, longitude, latitude });
       });
     }
@@ -87,8 +88,6 @@ const Courses = props => {
         .then(response => {
           let re = new RegExp("/", "g");
           let imageUrl = response.data.replace(re, "%2f");
-
-          console.log({ imgUrl: response.data, hash });
           history.push(`/home/qr/${code}/${imageUrl}/${hash}`);
         })
         .catch(err => {
