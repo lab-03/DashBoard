@@ -45,8 +45,9 @@ const Courses = props => {
     }
     if (location) {
       location.getCurrentPosition(function(position) {
-        longitude = position.coords.longitude.toFixed(7);
-        latitude = position.coords.latitude.toFixed(7);
+        longitude = position.coords.longitude;
+        latitude = position.coords.latitude;
+        console.log({ latitude, longitude });
         setState({ ...state, longitude, latitude });
       });
     }
@@ -66,9 +67,11 @@ const Courses = props => {
         "You must allow access to your location in order to generate a valid QrCode"
       );
     } else {
-      fetch("http://localhost:5000/api/qrcodes/create", {
+      fetch("http://localhost:8888/api/qrcodes/create", {
         method: "post",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           hash,
           longitude,
@@ -85,8 +88,6 @@ const Courses = props => {
         .then(response => {
           let re = new RegExp("/", "g");
           let imageUrl = response.data.replace(re, "%2f");
-
-          console.log({ imgUrl: response.data, hash });
           history.push(`/home/qr/${code}/${imageUrl}/${hash}`);
         })
         .catch(err => {

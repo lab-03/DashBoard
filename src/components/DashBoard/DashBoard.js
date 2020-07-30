@@ -2,21 +2,19 @@ import React from "react";
 import MaterialTable from "material-table";
 import { Grid } from "@material-ui/core";
 
-export default function DashBoard() {
-  const [state, setState] = React.useState({
+const DashBoard = ({
+  attendees,
+  onAttendeeAdd,
+  onAttendeeUpdate,
+  onAttendeeDelete
+}) => {
+  const [state] = React.useState({
     columns: [
       { title: "Name", field: "name" },
-      { title: "ID", field: "ID", type: "numeric" },
+      { title: "ID", field: "id", type: "numeric" },
       { title: "FR Score", field: "FRScore", type: "numeric" }
     ],
-    data: [
-      { name: "Test", ID: "20160001", FRScore: 82 },
-      {
-        name: "Potato",
-        ID: "20160002",
-        FRScore: 82
-      }
-    ]
+    listening: false
   });
 
   return (
@@ -26,41 +24,27 @@ export default function DashBoard() {
           className="cover"
           title="Attendees"
           columns={state.columns}
-          data={state.data}
+          data={attendees}
           editable={{
-            onRowAdd: newData =>
+            onRowAdd: newAttendee =>
               new Promise(resolve => {
                 setTimeout(() => {
                   resolve();
-                  setState(prevState => {
-                    const data = [...prevState.data];
-                    data.push(newData);
-                    return { ...prevState, data };
-                  });
+                  onAttendeeAdd(newAttendee);
                 }, 600);
               }),
-            onRowUpdate: (newData, oldData) =>
+            onRowUpdate: (updatedAttendee, attendees) =>
               new Promise(resolve => {
                 setTimeout(() => {
                   resolve();
-                  if (oldData) {
-                    setState(prevState => {
-                      const data = [...prevState.data];
-                      data[data.indexOf(oldData)] = newData;
-                      return { ...prevState, data };
-                    });
-                  }
+                  onAttendeeUpdate(updatedAttendee, attendees.tableData.id);
                 }, 600);
               }),
-            onRowDelete: oldData =>
+            onRowDelete: attendee =>
               new Promise(resolve => {
                 setTimeout(() => {
                   resolve();
-                  setState(prevState => {
-                    const data = [...prevState.data];
-                    data.splice(data.indexOf(oldData), 1);
-                    return { ...prevState, data };
-                  });
+                  onAttendeeDelete(attendee);
                 }, 600);
               })
           }}
@@ -68,4 +52,6 @@ export default function DashBoard() {
       </Grid>
     </div>
   );
-}
+};
+
+export default DashBoard;
