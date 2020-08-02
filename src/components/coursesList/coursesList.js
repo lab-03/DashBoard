@@ -9,6 +9,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Checkbox,
+  FormControlLabel,
   TextField
 } from "@material-ui/core";
 
@@ -34,9 +36,10 @@ const Courses = props => {
       title: "",
       code: ""
     },
+    checked: false,
     openDialog: false
   });
-  const getMyLocation = e => {
+  const getLocation = e => {
     let location = null,
       latitude = null,
       longitude = null;
@@ -52,17 +55,18 @@ const Courses = props => {
       });
     }
   };
+
   useEffect(() => {
     let { latitude, longitude } = state;
-    if (!latitude || !longitude) getMyLocation();
+    if (!latitude || !longitude) getLocation();
   });
 
   const createQrCode = (code, hash) => {
-    const { longitude, latitude } = state;
+    const { longitude, latitude, checked } = state;
     const { history } = props;
     console.log({ longitude, latitude });
 
-    if (!latitude || !longitude) {
+    if ((!latitude || !longitude) && !checked) {
       alert(
         "You must allow access to your location in order to generate a valid QrCode"
       );
@@ -74,6 +78,7 @@ const Courses = props => {
         },
         body: JSON.stringify({
           hash,
+          applyChecks: !checked,
           longitude,
           latitude
         })
@@ -95,7 +100,9 @@ const Courses = props => {
         });
     }
   };
-
+  const handleCheckboxClick = event => {
+    setState({ ...state, checked: !checked });
+  };
   const handleClickOpen = () => {
     setState({ ...state, openDialog: true });
   };
@@ -118,13 +125,22 @@ const Courses = props => {
     setState(updated);
   };
 
-  const { openDialog, newCourse, courses } = state;
+  const { openDialog, newCourse, courses, checked } = state;
 
   return (
     <div className="center">
       <Grid item xs={12} md={9}>
         <h3 variant="h6">My Courses</h3>
         <div>
+          <div className="center">
+            <FormControlLabel
+              value="start"
+              control={<Checkbox color="primary" />}
+              label="Disable extra checks"
+              labelPlacement="end"
+              onChange={handleCheckboxClick}
+            />
+          </div>
           <List>
             {courses.map(course => (
               <Course
