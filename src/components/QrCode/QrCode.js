@@ -9,13 +9,15 @@ const QrCode = props => {
   const [state, setState] = React.useState({
     hide: false,
     attendees: [],
-    socket: socketIO.connect("http://localhost:8888", { autoConnect: false }),
+    socket: socketIO.connect("https://gp-verifier.herokuapp.com", {
+      autoConnect: false
+    }),
     listening: false
   });
 
   useEffect(() => {
     let { listening, socket } = state;
-    console.log(listening);
+    console.log({ listening });
     if (listening === false) {
       console.log(hash);
       socket.connect();
@@ -46,7 +48,7 @@ const QrCode = props => {
   const onAttendeeAdd = newAttendee => {
     if (!newAttendee.name || !newAttendee.id)
       return alert("a name and an id must be provided");
-    let socket = socketIO.connect("http://localhost:8888");
+    let socket = socketIO.connect("https://gp-verifier.herokuapp.com");
     socket
       .on("connect", () => {
         console.log("Socket Connected", socket.id);
@@ -74,7 +76,7 @@ const QrCode = props => {
 
     let oldAttendee = JSON.parse(JSON.stringify(state.attendees[id]));
     delete oldAttendee.tableData;
-    let socket = socketIO.connect("http://localhost:8888");
+    let socket = socketIO.connect("https://gp-verifier.herokuapp.com");
     socket
       .on("connect", () => {
         console.log("Socket Connected", socket.id);
@@ -104,7 +106,7 @@ const QrCode = props => {
   const onAttendeeDelete = attendee => {
     let attendeeTemp = JSON.parse(JSON.stringify(attendee));
     delete attendeeTemp.tableData;
-    let socket = socketIO.connect("http://localhost:8888");
+    let socket = socketIO.connect("https://gp-verifier.herokuapp.com");
     socket
       .on("connect", () => {
         console.log("Socket Connected", socket.id);
@@ -130,8 +132,8 @@ const QrCode = props => {
   };
 
   const endQrCode = hash => {
-    fetch("http://localhost:8888/api/qrcodes/end", {
-      method: "post",
+    fetch("https://gp-verifier.herokuapp.com/api/qrcodes/end", {
+      method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         hash
@@ -145,38 +147,39 @@ const QrCode = props => {
   };
   let { hide, attendees } = state;
   return (
-    <div>
-      {!hide ? (
-        <Fragment>
-          <div className="center ma">
+    <Fragment>
+      <div className="mt5 flex justify-around">
+        <div className="w-100">
+          <DashBoard
+            attendees={attendees}
+            onAttendeeAdd={onAttendeeAdd}
+            onAttendeeUpdate={onAttendeeUpdate}
+            onAttendeeDelete={onAttendeeDelete}
+          />
+        </div>
+        {!hide ? (
+          <Fragment>
             <img
+              className="w-40 mr5"
               id="inputimage"
               alt="QrCode"
               src={imageUrl}
-              width="500px"
-              height="auto"
             />
-          </div>
-          <div className="center ma3">
-            <Button
-              variant="contained"
-              className="grow shadow"
-              color="primary"
-              onClick={() => endQrCode(hash)}
-            >
-              End Session
-            </Button>
-          </div>
-        </Fragment>
-      ) : null}
-      <div>
-        <DashBoard
-          attendees={attendees}
-          onAttendeeAdd={onAttendeeAdd}
-          onAttendeeUpdate={onAttendeeUpdate}
-          onAttendeeDelete={onAttendeeDelete}
-        />
+          </Fragment>
+        ) : null}
       </div>
+      {!hide ? (
+        <div className="center ma2 flex flex-row-reverse">
+          <Button
+            variant="contained"
+            className="grow shadow"
+            color="primary"
+            onClick={() => endQrCode(hash)}
+          >
+            End Session
+          </Button>
+        </div>
+      ) : null}
       {hide ? (
         <div className="center ma3 flex justify-around">
           <div>
@@ -207,7 +210,7 @@ const QrCode = props => {
           </div>
         </div>
       ) : null}
-    </div>
+    </Fragment>
   );
 };
 
