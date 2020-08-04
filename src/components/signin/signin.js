@@ -4,6 +4,15 @@ import shapee from "../../shape1.png";
 import { withStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@material-ui/core";
+
 let backStyle = {
   backgroundImage: `url(${background})`,
   height: "750px",
@@ -109,15 +118,33 @@ const Signin = (props) => {
   const [info, setInfo] = useState({
     Email: "",
     Password: "",
+    FirstName: "",
+    LastName: "",
+    EmailS: "",
+    PasswordS: "",
+    openDialog: false,
   });
+  const handleClickOpen = (e) => {
+    e.preventDefault();
+    setInfo({ ...info, openDialog: true });
+  };
+  const handleClose = () => {
+    setInfo({ ...info, openDialog: false });
+  };
   const InfoHandler = (e) => {
     const updatedInfo = { ...info, [e.target.name]: e.target.value };
     setInfo(updatedInfo);
   };
-  const ButtonHandler = () => {
+  const ButtonHandler = (e) => {
+    e.preventDefault();
     props.history.push("/home");
     toast.success(`Welcome ${info.Email} ! `);
   };
+  const SignUpButtonHandler = () => {
+    props.history.push("/home");
+    toast.success(`Welcome ${info.Email} ! `);
+  };
+
   return (
     <div style={backStyle}>
       <div style={layer}>
@@ -150,8 +177,82 @@ const Signin = (props) => {
           <button style={ButtonStyle} onClick={ButtonHandler}>
             Log In
           </button>
-          <button style={SignUpStyle}>Sign Up</button>
+          <button style={SignUpStyle} onClick={handleClickOpen}>
+            Sign Up
+          </button>
         </form>
+        <Dialog
+          open={info.openDialog}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Register</DialogTitle>
+          <DialogContent>
+            <div>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="FirstName"
+                name="FirstName"
+                type="text"
+                value={info.FirstName}
+                required
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={InfoHandler}
+              />
+              <TextField
+                margin="dense"
+                name="SecondName"
+                label="SecondName"
+                type="text"
+                value={info.SecondName}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                onChange={InfoHandler}
+              />
+              <TextField
+                margin="dense"
+                name="Email"
+                label="Email"
+                type="text"
+                value={info.Email}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                onChange={InfoHandler}
+              />
+              <TextField
+                margin="dense"
+                name="Password"
+                label="Password"
+                type="password"
+                value={info.Password}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                onChange={InfoHandler}
+              />
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={SignUpButtonHandler} color="primary">
+              Sign Up
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   );
