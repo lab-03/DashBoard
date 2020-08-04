@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import crypto from "crypto";
+import "./course.css";
 import {
   ListItem,
   ListItemSecondaryAction,
@@ -19,16 +20,39 @@ const Course = ({ code, title, createQrCode }) => {
   return (
     <Fragment>
       <ListItem>
-        <ListItemText primary={title} secondary={code} />
+        <ListItemText
+          primary={title}
+          secondary={code}
+          style={{
+            color: "#7f7aea",
+            fontSize: "80%",
+            fontFamily: ["Cairo", "sans-serif"],
+            textTransform: "none"
+          }}
+        />
         <ListItemSecondaryAction>
           <Link to={`/home/course/${code}`} className="link">
             <Button
               className="shadow grow"
-              variant="contained"
               color="primary"
+              variant="contained"
               size="small"
+              style={{
+                background: "#7f7aea",
+                borderRadius: "0px",
+                width: "120px",
+                fontFamily: ["Cairo", "sans-serif"],
+                textTransform: "none"
+              }}
             >
-              <p className="fw7-ns">Statistics</p>
+              <p
+                className="pl2 pr2"
+                style={{
+                  fontSize: "120%"
+                }}
+              >
+                Statistics
+              </p>
             </Button>
           </Link>
           <span className="ma2"></span>
@@ -38,13 +62,29 @@ const Course = ({ code, title, createQrCode }) => {
             variant="contained"
             color="primary"
             size="small"
+            style={{
+              background: "#7f7aea",
+              borderRadius: "0px",
+              width: "120px",
+              fontFamily: ["Cairo", "sans-serif"],
+              textTransform: "none"
+            }}
             onClick={() => createQrCode(code, hash)}
           >
-            <p className="fw7-ns">GenerateQrCode</p>
+            <p
+              className="pl2 pr2"
+              style={{
+                fontSize: "120%"
+              }}
+            >
+              QR CODE
+            </p>
           </Button>
         </ListItemSecondaryAction>
       </ListItem>
+      <div className="mt1"></div>
       <Divider />
+      <div className="mt1"></div>
     </Fragment>
   );
 };

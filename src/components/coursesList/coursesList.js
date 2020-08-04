@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Course from "../course/course";
+import "./coursesList.css";
 import {
   List,
   Grid,
@@ -128,40 +129,64 @@ const Courses = props => {
   const { openDialog, newCourse, courses, checked } = state;
 
   return (
-    <div className="center">
-      <Grid item xs={12} md={9}>
-        <h3 variant="h6">My Courses</h3>
+    <div>
+      <div className="flex">
         <div>
-          <div className="center">
-            <FormControlLabel
-              value="start"
-              control={<Checkbox color="primary" />}
-              label="Disable extra checks"
-              labelPlacement="end"
-              onChange={handleCheckboxClick}
-            />
-          </div>
-          <List>
-            {courses.map(course => (
-              <Course
-                key={course.code}
-                code={course.code}
-                title={course.title}
-                createQrCode={createQrCode}
-              />
-            ))}
-          </List>
-          <Button
-            className="shadow grow ma5"
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={handleClickOpen}
-          >
-            <p className="fw7-ns">Add New Course</p>
-          </Button>
+          <img className="w-30 mr7" alt="myCourses" src="myCoruses.png" />
         </div>
-      </Grid>
+        <div>
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" />}
+            label="Disable extra checks"
+            labelPlacement="end"
+            style={{
+              color: "#7f7aea",
+              fontFamily: ["Cairo", "sans-serif"],
+              marginLeft: "180px"
+            }}
+            onChange={handleCheckboxClick}
+          />
+        </div>
+      </div>
+      <div className="mw-100">
+        <Grid item xs={12} md={11}>
+          <div className="ml5">
+            <List>
+              {courses.map(course => (
+                <Course
+                  key={course.code}
+                  code={course.code}
+                  title={course.title}
+                  createQrCode={createQrCode}
+                />
+              ))}
+            </List>
+            <Button
+              className="shadow grow ma5"
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={handleClickOpen}
+              style={{
+                background: "#faa551",
+                borderRadius: "0px",
+                width: "120px",
+                textTransform: "none"
+              }}
+            >
+              <p
+                className=""
+                style={{
+                  fontSize: "120%"
+                }}
+              >
+                Add Course
+              </p>
+            </Button>
+          </div>
+        </Grid>
+      </div>
       <Dialog
         open={openDialog}
         onClose={handleClose}
@@ -208,10 +233,13 @@ const Courses = props => {
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            Subscribe
+            Add
           </Button>
         </DialogActions>
       </Dialog>
+      <div className="flex justify-end">
+        <img className="width" alt="bottom" src="bottom.png" />
+      </div>
     </div>
   );
 };
