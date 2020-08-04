@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import crypto from "crypto";
-import "./course.css";
 import {
   ListItem,
   ListItemSecondaryAction,
