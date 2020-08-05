@@ -19,12 +19,28 @@ const DashBoard = ({
 
   return (
     <div className="center">
-      <Grid item xs={12} md={9}>
+      <Grid item xs={12} md={11}>
         <MaterialTable
-          className="cover"
+          style={{
+            color: "#7f7aea",
+            fontFamily: ["Cairo", "sans-serif"]
+          }}
+          pagination={{
+            color: "#7f7aea"
+          }}
           title="Attendees"
           columns={state.columns}
           data={attendees}
+          options={{
+            headerStyle: {
+              color: "#7f7aea",
+              fontFamily: ["Cairo", "sans-serif"]
+            },
+            actionsCellStyle: {
+              color: "#7f7aea",
+              fontFamily: ["Cairo", "sans-serif"]
+            }
+          }}
           editable={{
             onRowAdd: newAttendee =>
               new Promise(resolve => {
