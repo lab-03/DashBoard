@@ -108,22 +108,38 @@ const Courses = props => {
     setState({ ...state, openDialog: true });
   };
   const handleClose = () => {
-    setState({ ...state, openDialog: false });
+    setState({
+      ...state,
+      openDialog: false,
+      newCourse: { title: "", code: "" }
+    });
   };
   const handleSubmit = () => {
     const { courses, newCourse } = state;
-    let newCourses = courses;
-    newCourses.push(newCourse);
-    setState({ ...state, courses: newCourses });
-    setState({ ...state, newCourse: { title: "", code: "" } });
-    handleClose();
+    if (!newCourse.title || !newCourse.code) {
+      alert("You must enter a course title and a course code");
+    } else {
+      let check = courses.filter(course => {
+        return course.code === newCourse.code;
+      });
+      if (check.length) {
+        alert("There exists a course with the same code");
+      } else {
+        let newCourses = courses;
+        newCourses.push(newCourse);
+        setState({
+          ...state,
+          courses: newCourses
+        });
+        handleClose();
+      }
+    }
   };
   const newCourseHandler = e => {
-    let target = e.target.name;
-    const prev = state.newCourse;
-    prev[target] = e.target.value;
-    const updated = { ...state, newCourse: prev };
-    setState(updated);
+    let target = e.target.name; //title or code to be updated
+    let prev = state.newCourse; // prev newCourse
+    prev[target] = e.target.value; // update the title or the code depending on which has been updated
+    setState({ ...state, newCourse: prev });
   };
 
   const { openDialog, newCourse, courses, checked } = state;
