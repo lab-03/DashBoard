@@ -3,7 +3,7 @@ import "./QrCode.css";
 import DashBoard from "../DashBoard/DashBoard";
 import { Button } from "@material-ui/core";
 import socketIO from "socket.io-client";
-import bottomRightImage from "./bottomRight.png";
+import bottomLeftImage from "./bottomLeft.png";
 
 const QrCode = props => {
   let { imageUrl, hash } = props.match.params;
@@ -188,13 +188,19 @@ const QrCode = props => {
                     variant="contained"
                     className="grow shadow"
                     color="primary"
-                    onClick={() => {}}
                     style={{
                       background: "#7f7aea",
                       borderRadius: "0px",
                       width: "100%",
                       fontFamily: ["Cairo", "sans-serif"],
                       textTransform: "none"
+                    }}
+                    onClick={() => {
+                      let { socket } = state;
+                      console.log(`disconnecting socket ${socket.id}`);
+                      socket.disconnect();
+                      setState({ ...state, listening: -1 });
+                      return props.history.push("/home");
                     }}
                   >
                     <p
@@ -213,13 +219,7 @@ const QrCode = props => {
                     variant="contained"
                     className="grow shadow"
                     color="primary"
-                    onClick={() => {
-                      let { socket } = state;
-                      console.log(`disconnecting socket ${socket.id}`);
-                      socket.disconnect();
-                      setState({ ...state, listening: -1 });
-                      return props.history.push("/home");
-                    }}
+                    onClick={() => {}}
                     style={{
                       background: "#faa551",
                       borderRadius: "0px",
@@ -289,9 +289,9 @@ const QrCode = props => {
       </div>
       <div>
         <img
-          className="bottomRightImage"
-          alt="bottomRightImage"
-          src={bottomRightImage}
+          className="bottomLeftImage"
+          alt="bottomLeftImage"
+          src={bottomLeftImage}
         />
       </div>
     </Fragment>

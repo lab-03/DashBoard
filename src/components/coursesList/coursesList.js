@@ -239,9 +239,9 @@ const Courses = props => {
       </Dialog>
       <div className="flex justify-end">
         <img
-          className="bottomLeftImage"
-          alt="bottomLeft"
-          src="bottomLeft.png"
+          className="bottomRightImage"
+          alt="bottomRight"
+          src="bottomRight.png"
         />
       </div>
     </div>
