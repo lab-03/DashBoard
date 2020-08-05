@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Course from "../course/course";
 import "./coursesList.css";
+import Course from "../course/course";
 import {
   List,
   Grid,
@@ -171,7 +171,7 @@ const Courses = props => {
               style={{
                 background: "#faa551",
                 borderRadius: "0px",
-                width: "120px",
+                width: "10%",
                 textTransform: "none"
               }}
             >
@@ -238,7 +238,11 @@ const Courses = props => {
         </DialogActions>
       </Dialog>
       <div className="flex justify-end">
-        <img className="width" alt="bottom" src="bottom.png" />
+        <img
+          className="bottomLeftImage"
+          alt="bottomLeft"
+          src="bottomLeft.png"
+        />
       </div>
     </div>
   );
