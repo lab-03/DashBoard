@@ -33,14 +33,6 @@ const QrCode = props => {
         .on("attendees", attendees => {
           setState({ ...state, attendees });
         })
-        .on(hash, newAttendee => {
-          console.log({ hash, newAttendee });
-          setState(prevState => {
-            const attendees = [...prevState.attendees];
-            attendees.push(newAttendee);
-            return { ...prevState, attendees };
-          });
-        })
         .on("disconnect", () => {
           console.log(`disconnected from server`);
           setState({ ...state, listening: false });
@@ -52,7 +44,10 @@ const QrCode = props => {
     setState({ ...state, openDialog: true });
   };
   const handleClose = () => {
-    setState({ ...state, openDialog: false });
+    setState(prevState => {
+      const attendees = [...prevState.attendees];
+      return { ...prevState, attendees, openDialog: false };
+    });
   };
   const handleSubmit = question => {
     console.log(question);
@@ -68,7 +63,13 @@ const QrCode = props => {
         console.log("Socket Connected", socket.id);
         socket.emit("add", { hash, newAttendee });
       })
-      .on("adding", () => {
+      .on("addition succeeded", newAttendee => {
+        console.log("addition succeeded", newAttendee);
+        setState(prevState => {
+          const attendees = [...prevState.attendees];
+          attendees.push(newAttendee);
+          return { ...prevState, attendees };
+        });
         console.log(`disconnecting socket ${socket.id}`);
         socket.disconnect();
       })
@@ -145,6 +146,10 @@ const QrCode = props => {
   };
 
   const endQrCode = hash => {
+    setState(prevState => {
+      const attendees = [...prevState.attendees];
+      return { ...prevState, attendees, hide: true };
+    });
     fetch("https://gp-verifier.herokuapp.com/api/qrcodes/end", {
       method: "put",
       headers: { "Content-Type": "application/json" },
@@ -154,11 +159,12 @@ const QrCode = props => {
     })
       .then(response => response.json())
       .then(response => {
-        setState({ ...state, hide: true });
+        console.log(response);
       })
       .catch(err => console.log(err));
   };
   let { openDialog, hide, attendees } = state;
+  console.log(attendees);
   return (
     <Fragment>
       <div className="mt5 flex justify-around">
