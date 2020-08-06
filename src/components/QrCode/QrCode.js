@@ -1,6 +1,8 @@
 import React, { Fragment, useEffect } from "react";
+
 import "./QrCode.css";
 import DashBoard from "../DashBoard/DashBoard";
+import QuestionDialog from "../questionDialog/questionDialog";
 import { Button } from "@material-ui/core";
 import socketIO from "socket.io-client";
 import bottomLeftImage from "./bottomLeft.png";
@@ -9,6 +11,7 @@ const QrCode = props => {
   let { imageUrl, hash } = props.match.params;
   const [state, setState] = React.useState({
     hide: false,
+    openDialog: false,
     attendees: [],
     socket: socketIO.connect("https://gp-verifier.herokuapp.com", {
       autoConnect: false
@@ -45,6 +48,16 @@ const QrCode = props => {
       setState({ ...state, listening: true });
     }
   }, [state, hash]);
+  const handleClickOpen = () => {
+    setState({ ...state, openDialog: true });
+  };
+  const handleClose = () => {
+    setState({ ...state, openDialog: false });
+  };
+  const handleSubmit = question => {
+    console.log(question);
+    handleClose();
+  };
 
   const onAttendeeAdd = newAttendee => {
     if (!newAttendee.name || !newAttendee.id)
@@ -89,7 +102,6 @@ const QrCode = props => {
           const attendees = [...prevState.attendees];
           console.log(attendees);
           attendees[id] = updatedAttendee;
-
           return { ...prevState, attendees };
         });
         socket.disconnect();
@@ -146,7 +158,7 @@ const QrCode = props => {
       })
       .catch(err => console.log(err));
   };
-  let { hide, attendees } = state;
+  let { openDialog, hide, attendees } = state;
   return (
     <Fragment>
       <div className="mt5 flex justify-around">
@@ -220,7 +232,7 @@ const QrCode = props => {
                     variant="contained"
                     className="grow shadow"
                     color="primary"
-                    onClick={() => {}}
+                    onClick={handleClickOpen}
                     style={{
                       background: "#7f7aea",
                       borderRadius: "0px",
@@ -296,6 +308,11 @@ const QrCode = props => {
           src={bottomLeftImage}
         />
       </div>
+      <QuestionDialog
+        openDialog={openDialog}
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+      />
     </Fragment>
   );
 };
