@@ -218,10 +218,10 @@ const Signin = (props) => {
               />
               <TextField
                 margin="dense"
-                name="Email"
+                name="EmailS"
                 label="Email"
                 type="text"
-                value={info.Email}
+                value={info.EmailS}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -231,10 +231,10 @@ const Signin = (props) => {
               />
               <TextField
                 margin="dense"
-                name="Password"
+                name="PasswordS"
                 label="Password"
                 type="password"
-                value={info.Password}
+                value={info.PasswordS}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
