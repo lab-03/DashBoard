@@ -189,9 +189,10 @@ const QrCode = props => {
                     className="grow shadow"
                     color="primary"
                     style={{
-                      background: "#7f7aea",
+                      background: "#faa551",
                       borderRadius: "0px",
-                      width: "100%",
+                      width: "180px",
+                      height: "50px",
                       fontFamily: ["Cairo", "sans-serif"],
                       textTransform: "none"
                     }}
@@ -221,9 +222,10 @@ const QrCode = props => {
                     color="primary"
                     onClick={() => {}}
                     style={{
-                      background: "#faa551",
+                      background: "#7f7aea",
                       borderRadius: "0px",
-                      width: "100%",
+                      width: "180px",
+                      height: "50px",
                       fontFamily: ["Cairo", "sans-serif"],
                       textTransform: "none"
                     }}
