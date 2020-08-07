@@ -9,10 +9,10 @@ import {
   Divider
 } from "@material-ui/core";
 
-const Course = ({ code, title, createQrCode }) => {
+const Course = ({ id, name, createQrCode }) => {
   const [state] = useState({
-    code,
-    title,
+    id,
+    name,
     hash: crypto.randomBytes(20).toString("hex")
   });
   const { hash } = state;
@@ -20,8 +20,8 @@ const Course = ({ code, title, createQrCode }) => {
     <Fragment>
       <ListItem>
         <ListItemText
-          primary={title}
-          secondary={code}
+          primary={name}
+          secondary={id}
           style={{
             color: "#7f7aea",
             fontSize: "80%",
@@ -30,7 +30,7 @@ const Course = ({ code, title, createQrCode }) => {
           }}
         />
         <ListItemSecondaryAction>
-          <Link to={`/home/course/${code}`} className="link">
+          <Link to={`/home/course/${id}`} className="link">
             <Button
               className="shadow grow"
               color="primary"
@@ -68,7 +68,7 @@ const Course = ({ code, title, createQrCode }) => {
               fontFamily: ["Cairo", "sans-serif"],
               textTransform: "none"
             }}
-            onClick={() => createQrCode(code, hash)}
+            onClick={() => createQrCode(id, hash)}
           >
             <p
               className="pl2 pr2"

@@ -10,7 +10,7 @@ import bottomLeftImage from "./bottomLeft.png";
 const QrCode = props => {
   let { imageUrl, hash } = props.match.params;
   const [state, setState] = React.useState({
-    hide: true,
+    hide: false,
     openDialog: false,
     attendees: [],
     socket: io("https://gp-verifier.herokuapp.com", {

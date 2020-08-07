@@ -17,25 +17,12 @@ import {
 
 const Courses = props => {
   const [state, setState] = useState({
-    courses: [
-      {
-        title: "Introduction to CS",
-        code: "CS-123"
-      },
-      {
-        title: "ML",
-        code: "CS-255"
-      },
-      {
-        title: "OOP",
-        code: "CS-124"
-      }
-    ],
+    courses: [],
     longitude: null,
     latitude: null,
     newCourse: {
-      title: "",
-      code: ""
+      name: "",
+      id: ""
     },
     checked: false,
     openDialog: false
@@ -59,10 +46,29 @@ const Courses = props => {
 
   useEffect(() => {
     let { latitude, longitude } = state;
+    if (!courses.length) {
+      fetch("https://a-tracker.herokuapp.com/courses", {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "access-token": "SnsRKjHXwHVQFvxjh_f7pg",
+          client: "zv1Y0B-2SkqwVTD4u_h8Kg",
+          uid: "doctor2@fci-cu.edu.eg",
+          "token-type": "Bearer",
+          expiry: "1597497091"
+        }
+      })
+        .then(response => response.json())
+        .then(response => {
+          console.log(response);
+          setState({ ...state, courses: response });
+        })
+        .catch(err => console.log(err));
+    }
     if (!latitude || !longitude) getLocation();
   });
 
-  const createQrCode = (code, hash) => {
+  const createQrCode = (id, hash) => {
     const { longitude, latitude, checked } = state;
     const { history } = props;
     console.log({ longitude, latitude });
@@ -72,7 +78,7 @@ const Courses = props => {
         "You must allow access to your location in order to generate a valid QrCode"
       );
     } else {
-      fetch("https://gp-verifier.herokuapp.com/api/qrcodes/create", {
+      fetch("http://localhost:8888/api/qrcodes/create", {
         method: "post",
         headers: {
           "Content-Type": "application/json"
@@ -94,7 +100,7 @@ const Courses = props => {
         .then(response => {
           let re = new RegExp("/", "g");
           let imageUrl = response.data.replace(re, "%2f");
-          history.push(`/home/qr/${code}/${imageUrl}/${hash}`);
+          history.push(`/home/qr/${id}/${imageUrl}/${hash}`);
         })
         .catch(err => {
           console.log(err);
@@ -111,19 +117,19 @@ const Courses = props => {
     setState({
       ...state,
       openDialog: false,
-      newCourse: { title: "", code: "" }
+      newCourse: { name: "", id: "" }
     });
   };
   const handleSubmit = () => {
     const { courses, newCourse } = state;
-    if (!newCourse.title || !newCourse.code) {
-      alert("You must enter a course title and a course code");
+    if (!newCourse.name || !newCourse.id) {
+      alert("You must enter a course name and a course id");
     } else {
       let check = courses.filter(course => {
-        return course.code === newCourse.code;
+        return course.id === newCourse.id;
       });
       if (check.length) {
-        alert("There exists a course with the same code");
+        alert("There exists a course with the same id");
       } else {
         let newCourses = courses;
         newCourses.push(newCourse);
@@ -136,14 +142,13 @@ const Courses = props => {
     }
   };
   const newCourseHandler = e => {
-    let target = e.target.name; //title or code to be updated
+    let target = e.target.name; //name or id to be updated
     let prev = state.newCourse; // prev newCourse
-    prev[target] = e.target.value; // update the title or the code depending on which has been updated
+    prev[target] = e.target.value; // update the name or the id depending on which has been updated
     setState({ ...state, newCourse: prev });
   };
 
   const { openDialog, newCourse, courses, checked } = state;
-
   return (
     <div>
       <div className="flex">
@@ -169,14 +174,17 @@ const Courses = props => {
         <Grid item xs={12} md={11}>
           <div className="ml5">
             <List>
-              {courses.map(course => (
-                <Course
-                  key={course.code}
-                  code={course.code}
-                  title={course.title}
-                  createQrCode={createQrCode}
-                />
-              ))}
+              {courses.map(course => {
+                console.log({ courseName: course.name, id: course.id });
+                return (
+                  <Course
+                    key={course.id}
+                    id={course.id}
+                    name={course.name}
+                    createQrCode={createQrCode}
+                  />
+                );
+              })}
             </List>
             <Button
               className="shadow grow ma5"
@@ -211,17 +219,16 @@ const Courses = props => {
         <DialogTitle id="form-dialog-title">ADD NEW COURSE</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To Add an new Course please enter the course Title and the course
-            ID.
+            To Add an new Course please enter the course name and the course id.
           </DialogContentText>
           <div>
             <TextField
               autoFocus
               margin="dense"
-              label="Title"
-              name="title"
+              label="name"
+              name="name"
               type="text"
-              value={newCourse.title}
+              value={newCourse.name}
               required
               fullWidth
               InputLabelProps={{
@@ -231,10 +238,10 @@ const Courses = props => {
             />
             <TextField
               margin="dense"
-              name="code"
-              label="code"
+              name="id"
+              label="id"
               type="text"
-              value={newCourse.code}
+              value={newCourse.id}
               fullWidth
               InputLabelProps={{
                 shrink: true
