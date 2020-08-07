@@ -59,10 +59,6 @@ const QrCode = props => {
       return { ...prevState, attendees, openDialog: false };
     });
   };
-  const handleSubmit = question => {
-    console.log(question);
-    handleClose();
-  };
 
   const onAttendeeAdd = newAttendee => {
     if (!newAttendee.name || !newAttendee.id)
@@ -324,11 +320,7 @@ const QrCode = props => {
           src={bottomLeftImage}
         />
       </div>
-      <QuestionDialog
-        openDialog={openDialog}
-        handleClose={handleClose}
-        handleSubmit={handleSubmit}
-      />
+      <QuestionDialog openDialog={openDialog} handleClose={handleClose} />
     </Fragment>
   );
 };

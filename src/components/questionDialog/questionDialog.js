@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import QuestionChart from "../questionChart/questionChart";
 
 import {
   Button,
@@ -14,7 +15,7 @@ import {
   TextField
 } from "@material-ui/core";
 
-const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
+const QuestionDialog = ({ handleClose, openDialog }) => {
   const [state, setState] = useState({
     question: {
       title: "",
@@ -23,11 +24,21 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
       answer_3: "",
       correctAnswer: null
     },
+    showChart: false,
     openDialog,
-    handleClose,
-    handleSubmit
+    handleClose
   });
-
+  const handleSubmit = question => {
+    if (
+      !question.title ||
+      !question.answer_1 ||
+      !question.answer_2 ||
+      !question.answer_3 ||
+      !question.correctAnswer
+    ) {
+      alert("Please fill all fields!");
+    } else setState({ ...state, showChart: true });
+  };
   const handleFieldChange = event => {
     let target = event.target.name; // question title, answers or correctAnswer to be changed
     let prev = state.question; // prev question object
@@ -35,8 +46,6 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
     setState({ ...state, question: prev });
   };
   const closeDialog = event => {
-    let { question } = state;
-    let { currentTarget } = event;
     setState({
       ...state,
       question: {
@@ -47,13 +56,10 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
         correctAnswer: null
       }
     });
-    if (currentTarget.value === "send") {
-      state.handleSubmit(question);
-    } else {
-      state.handleClose(question);
-    }
+    setState({ ...state, showChart: false });
+    state.handleClose();
   };
-  let { question } = state;
+  let { question, showChart } = state;
   return (
     <Dialog open={openDialog} onClose={handleClose} aria-labelledby="question">
       <DialogTitle id="question">Question</DialogTitle>
@@ -66,6 +72,7 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
               label="Title"
               name="title"
               type="text"
+              disabled={showChart}
               value={question.title}
               required
               fullWidth
@@ -79,6 +86,7 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
               name="answer_1"
               label="Answer#1"
               type="text"
+              disabled={showChart}
               value={question.answer_1}
               fullWidth
               InputLabelProps={{
@@ -92,6 +100,7 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
               name="answer_2"
               label="Answer#2"
               type="text"
+              disabled={showChart}
               value={question.answer_2}
               fullWidth
               InputLabelProps={{
@@ -105,6 +114,7 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
               name="answer_3"
               label="Answer#3"
               type="text"
+              disabled={showChart}
               value={question.answer_3}
               fullWidth
               InputLabelProps={{
@@ -123,19 +133,34 @@ const QuestionDialog = ({ handleClose, handleSubmit, openDialog }) => {
                 value={question.correctAnswer}
                 onChange={handleFieldChange}
               >
-                <FormControlLabel value="answer#1" control={<Radio />} />
-                <FormControlLabel value="answer#2" control={<Radio />} />
-                <FormControlLabel value="answer#3" control={<Radio />} />
+                <FormControlLabel
+                  value="answer#1"
+                  control={<Radio disabled={showChart} />}
+                />
+                <FormControlLabel
+                  value="answer#2"
+                  control={<Radio disabled={showChart} />}
+                />
+                <FormControlLabel
+                  value="answer#3"
+                  control={<Radio disabled={showChart} />}
+                />
               </RadioGroup>
             </FormControl>
           </div>
         </div>
+        {showChart ? <QuestionChart question={question} /> : null}
       </DialogContent>
       <DialogActions>
         <Button value="cancel" onClick={closeDialog} color="primary">
-          Cancel
+          Close
         </Button>
-        <Button value="send" onClick={closeDialog} color="primary">
+        <Button
+          value="send"
+          onClick={() => handleSubmit(question)}
+          color="primary"
+          disabled={showChart}
+        >
           Send
         </Button>
       </DialogActions>
