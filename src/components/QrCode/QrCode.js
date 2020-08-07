@@ -4,16 +4,16 @@ import "./QrCode.css";
 import DashBoard from "../DashBoard/DashBoard";
 import QuestionDialog from "../questionDialog/questionDialog";
 import { Button } from "@material-ui/core";
-import socketIO from "socket.io-client";
+import io from "socket.io-client";
 import bottomLeftImage from "./bottomLeft.png";
 
 const QrCode = props => {
   let { imageUrl, hash } = props.match.params;
   const [state, setState] = React.useState({
-    hide: false,
+    hide: true,
     openDialog: false,
     attendees: [],
-    socket: socketIO.connect("https://gp-verifier.herokuapp.com", {
+    socket: io("https://gp-verifier.herokuapp.com", {
       autoConnect: false
     }),
     listening: false
@@ -24,19 +24,29 @@ const QrCode = props => {
     console.log({ listening });
     if (listening === false) {
       console.log(hash);
+      if (!socket.connected) {
+        socket
+          .on("connect", () => {
+            console.log("Socket Connected", socket.id);
+            socket.emit("hash", { hash });
+          })
+          .on("attendees", attendees => {
+            setState({ ...state, attendees });
+          })
+          .on(hash, attendee => {
+            console.log({ socketId: socket.id, hash, attendee });
+            setState(prevState => {
+              const attendees = [...prevState.attendees];
+              attendees.push(attendee);
+              return { ...prevState, attendees };
+            });
+          })
+          .on("disconnect", () => {
+            console.log(`disconnected from server`);
+            setState({ ...state, listening: false });
+          });
+      }
       socket.connect();
-      socket
-        .on("connect", () => {
-          console.log("Socket Connected", socket.id);
-          socket.emit("hash", { hash });
-        })
-        .on("attendees", attendees => {
-          setState({ ...state, attendees });
-        })
-        .on("disconnect", () => {
-          console.log(`disconnected from server`);
-          setState({ ...state, listening: false });
-        });
       setState({ ...state, listening: true });
     }
   }, [state, hash]);
@@ -57,7 +67,7 @@ const QrCode = props => {
   const onAttendeeAdd = newAttendee => {
     if (!newAttendee.name || !newAttendee.id)
       return alert("a name and an id must be provided");
-    let socket = socketIO.connect("https://gp-verifier.herokuapp.com");
+    let socket = io.connect("https://gp-verifier.herokuapp.com");
     socket
       .on("connect", () => {
         console.log("Socket Connected", socket.id);
@@ -91,7 +101,7 @@ const QrCode = props => {
 
     let oldAttendee = JSON.parse(JSON.stringify(state.attendees[id]));
     delete oldAttendee.tableData;
-    let socket = socketIO.connect("https://gp-verifier.herokuapp.com");
+    let socket = io.connect("https://gp-verifier.herokuapp.com");
     socket
       .on("connect", () => {
         console.log("Socket Connected", socket.id);
@@ -120,7 +130,7 @@ const QrCode = props => {
   const onAttendeeDelete = attendee => {
     let attendeeTemp = JSON.parse(JSON.stringify(attendee));
     delete attendeeTemp.tableData;
-    let socket = socketIO.connect("https://gp-verifier.herokuapp.com");
+    let socket = io.connect("https://gp-verifier.herokuapp.com");
     socket
       .on("connect", () => {
         console.log("Socket Connected", socket.id);
