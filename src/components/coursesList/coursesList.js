@@ -78,7 +78,7 @@ const Courses = props => {
         "You must allow access to your location in order to generate a valid QrCode"
       );
     } else {
-      fetch("http://localhost:8888/api/qrcodes/create", {
+      fetch("https://gp-verifier.herokuapp.com/api/qrcodes/create", {
         method: "post",
         headers: {
           "Content-Type": "application/json"
