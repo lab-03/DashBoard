@@ -1,5 +1,16 @@
 import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
+import Chart from "chart.js";
+
+// in case the correct answer is the 1st
+Chart.plugins.register({
+  beforeDraw: function(c) {
+    var legends = c.legend.legendItems;
+    legends.forEach(function(e) {
+      if (e.text === "# of wrong Votes") e.fillStyle = "rgb(255, 99, 132)";
+    });
+  }
+});
 
 const QuestionChart = ({ question }) => {
   const [state, setState] = useState({
@@ -26,9 +37,7 @@ const QuestionChart = ({ question }) => {
   });
 
   let withGreen = state;
-  let correctAnswerNumber = question.correctAnswer.split("#")[1]; // answer#1
-  console.log({ question, correctAnswerNumber });
-  withGreen.datasets[1].backgroundColor[correctAnswerNumber - 1] =
+  withGreen.datasets[1].backgroundColor[question.correctAnswer - 1] =
     "rgb(34,139,34)";
   return (
     <Bar

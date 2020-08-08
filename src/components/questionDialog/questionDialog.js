@@ -134,15 +134,15 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
                 onChange={handleFieldChange}
               >
                 <FormControlLabel
-                  value="answer#1"
+                  value="1"
                   control={<Radio disabled={showChart} />}
                 />
                 <FormControlLabel
-                  value="answer#2"
+                  value="2"
                   control={<Radio disabled={showChart} />}
                 />
                 <FormControlLabel
-                  value="answer#3"
+                  value="3"
                   control={<Radio disabled={showChart} />}
                 />
               </RadioGroup>
