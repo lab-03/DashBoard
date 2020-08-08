@@ -4,6 +4,7 @@ import shapee from "../../shape1.png";
 import { withStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 import auth from "../../auth";
+import SignUp from "./SignUp";
 
 import {
   Button,
@@ -147,8 +148,10 @@ const Signin = (props) => {
     });
   };
   const SignUpButtonHandler = () => {
-    props.history.push("/home");
-    toast.success(`Welcome ${info.Email} ! `);
+    SignUp.SignUp(info.FirstName, info.LastName, info.EmailS, info.PasswordS);
+    handleClose();
+    // props.history.push("/home");
+    //toast.success(`Welcome ${info.Email} ! `);
   };
 
   return (
@@ -212,8 +215,8 @@ const Signin = (props) => {
               />
               <TextField
                 margin="dense"
-                name="SecondName"
-                label="SecondName"
+                name="LastName"
+                label="LastName"
                 type="text"
                 value={info.SecondName}
                 fullWidth
