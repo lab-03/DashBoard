@@ -10,6 +10,7 @@ const LogOut = props => {
     backgroundColor: "#7f7aea",
     fontSize: "12px",
     height: "3%",
+    cursor: "pointer",
     borderWidth: "0.1px",
     borderColor: "#c2c2c2",
     border: "0px solid #E8E8E8"
@@ -19,7 +20,7 @@ const LogOut = props => {
     props.history.push("/");
   };
   return (
-    <button style={stylee} onClick={buttonHandler}>
+    <button className="grow" style={stylee} onClick={buttonHandler}>
       Log Out
     </button>
   );

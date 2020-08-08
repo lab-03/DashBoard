@@ -12,7 +12,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
+  TextField
 } from "@material-ui/core";
 
 let backStyle = {
@@ -21,13 +21,13 @@ let backStyle = {
 
   backgroundSize: "cover",
   backgroundPosition: "center",
-  backgroundAttachment: "fixed",
+  backgroundAttachment: "fixed"
 };
 let shapeStyle = {
   position: "fixed",
   top: 50,
   left: 800,
-  width: "45%",
+  width: "45%"
 };
 
 let layer = {
@@ -37,13 +37,13 @@ let layer = {
   left: 0,
   width: "100%",
   height: "750px",
-  backgroundAttachment: "fixed",
+  backgroundAttachment: "fixed"
 };
 
 const styles = {
   input: {
-    color: "white",
-  },
+    color: "white"
+  }
 };
 let EmailStyle = {
   position: "fixed",
@@ -60,7 +60,7 @@ let EmailStyle = {
   backgroundColor: "white",
 
   border: "2px solid #E8E8E8",
-  fontFamily: "Arial",
+  fontFamily: "Arial"
 };
 let PasswordStyle = {
   width: "32.5%",
@@ -78,7 +78,7 @@ let PasswordStyle = {
   backgroundColor: "white",
 
   border: "2px solid #E8E8E8",
-  fontFamily: "Arial",
+  fontFamily: "Arial"
 };
 let ButtonStyle = {
   position: "fixed",
@@ -97,6 +97,7 @@ let ButtonStyle = {
 
   border: "0px solid #E8E8E8",
   fontFamily: "Arial",
+  cursor: "pointer"
 };
 let SignUpStyle = {
   position: "fixed",
@@ -115,9 +116,9 @@ let SignUpStyle = {
 
   border: "0px solid #E8E8E8",
   fontFamily: "Arial",
+  cursor: "pointer"
 };
-
-const Signin = (props) => {
+const Signin = props => {
   const [info, setInfo] = useState({
     Email: "",
     Password: "",
@@ -125,33 +126,50 @@ const Signin = (props) => {
     LastName: "",
     EmailS: "",
     PasswordS: "",
-    openDialog: false,
+    openDialog: false
   });
-  const handleClickOpen = (e) => {
+  const handleClickOpen = e => {
     e.preventDefault();
     setInfo({ ...info, openDialog: true });
   };
   const handleClose = () => {
     setInfo({ ...info, openDialog: false });
   };
-  const InfoHandler = (e) => {
+  const InfoHandler = e => {
     const updatedInfo = { ...info, [e.target.name]: e.target.value };
     setInfo(updatedInfo);
   };
-  const ButtonHandler = (e) => {
+  const ButtonHandler = e => {
+    if (!info.Email || !info.Password) alert("Please enter email and password");
     e.preventDefault();
-    //props.history.push("/home");
 
-    auth.login(info.Email, info.Password, () => {
-      props.history.push("/home");
-      toast.success(`Welcome ${localStorage.getItem("firstName")} ! `);
+    auth.login(info.Email, info.Password, res => {
+      if (res) {
+        props.history.push("/home");
+        toast.success(`Welcome ${localStorage.getItem("firstName")} ! `);
+      } else alert("invalid email or password");
     });
   };
   const SignUpButtonHandler = () => {
-    SignUp.SignUp(info.FirstName, info.LastName, info.EmailS, info.PasswordS);
-    handleClose();
-    // props.history.push("/home");
-    //toast.success(`Welcome ${info.Email} ! `);
+    if (!info.FirstName || !info.LastName || !info.EmailS || !info.PasswordS)
+      alert("Please fill in all fields");
+    else {
+      SignUp.SignUp(
+        info.FirstName,
+        info.LastName,
+        info.EmailS,
+        info.PasswordS,
+        res => {
+          console.log(res);
+          if (res) {
+            handleClose();
+            alert("SignUp succeeded you can login now!");
+            // props.history.push("/home");
+            // toast.success(`Welcome ${localStorage.getItem("firstName")} ! `);
+          } else alert("OOps something happened please try again!");
+        }
+      );
+    }
   };
 
   return (
@@ -160,7 +178,7 @@ const Signin = (props) => {
         <div
           style={{
             backgroundColor: "rgb(255,255,255,0.8)",
-            backgroundSize: "auto",
+            backgroundSize: "auto"
             //borderRadius: "130px",
           }}
         ></div>
@@ -184,10 +202,14 @@ const Signin = (props) => {
             value={info.Password}
             onChange={InfoHandler}
           ></input>
-          <button style={ButtonStyle} onClick={ButtonHandler}>
+          <button className="grow" style={ButtonStyle} onClick={ButtonHandler}>
             Log In
           </button>
-          <button style={SignUpStyle} onClick={handleClickOpen}>
+          <button
+            className="grow"
+            style={SignUpStyle}
+            onClick={handleClickOpen}
+          >
             Sign Up
           </button>
         </form>
@@ -209,7 +231,7 @@ const Signin = (props) => {
                 required
                 fullWidth
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={InfoHandler}
               />
@@ -221,7 +243,7 @@ const Signin = (props) => {
                 value={info.SecondName}
                 fullWidth
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 required
                 onChange={InfoHandler}
@@ -234,7 +256,7 @@ const Signin = (props) => {
                 value={info.EmailS}
                 fullWidth
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 required
                 onChange={InfoHandler}
@@ -247,7 +269,7 @@ const Signin = (props) => {
                 value={info.PasswordS}
                 fullWidth
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 required
                 onChange={InfoHandler}

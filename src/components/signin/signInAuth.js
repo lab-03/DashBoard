@@ -9,19 +9,21 @@ class SignInAuth {
       method: "post",
       url: "https://a-tracker.herokuapp.com/auth/sign_in",
       headers: { "Content-Type": "application/json" },
-      data: JSON.stringify(data),
+      data: JSON.stringify(data)
     };
     await axios(config)
-      .then((response) => {
+      .then(response => {
         localStorage.setItem("accessToken", response.headers["access-token"]);
         localStorage.setItem("client", response.headers["client"]);
         localStorage.setItem("uid", response.headers["uid"]);
         localStorage.setItem("firstName", response.data.data.first_name);
-        console.log("here", localStorage.getItem("accessToken"));
+        localStorage.setItem("expiry", response.headers["expiry"]);
+        localStorage.setItem("tokenType", response.headers["token-type"]);
+        console.log("here", localStorage);
       })
 
-      .catch((error) => {
-        if (error.response.status == 401) {
+      .catch(error => {
+        if (error.response.status === 401) {
           console.log("hi");
           localStorage.removeItem("accessToken");
         }

@@ -9,8 +9,9 @@ class Auth {
     // console.log("off", localStorage.getItem("accessToken"));
     if (localStorage.getItem("accessToken")) {
       this.authenticated = true;
-      cb();
+      cb(true);
     } else {
+      cb(false);
       console.log("Wrong Credentials");
     }
   }
@@ -22,7 +23,7 @@ class Auth {
   }
 
   isAuthenticated() {
-    return localStorage.getItem("accessToken") != undefined;
+    return localStorage.getItem("accessToken") !== undefined;
   }
 }
 
