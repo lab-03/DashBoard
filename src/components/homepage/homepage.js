@@ -3,7 +3,7 @@ import Courses from "../coursesList/coursesList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LogOut from "../logout/LogOut";
-const HomePage = (props) => {
+const HomePage = props => {
   return (
     <div>
       <ToastContainer autoClose={3000} hideProgressBar />

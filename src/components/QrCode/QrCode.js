@@ -174,6 +174,8 @@ const QrCode = props => {
   console.log(attendees);
   return (
     <Fragment>
+      <LogOut history={props.history} />
+
       <div className="mt5 flex justify-around">
         <div
           style={{

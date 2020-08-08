@@ -25,7 +25,8 @@ const Courses = props => {
       id: ""
     },
     checked: false,
-    openDialog: false
+    openDialog: false,
+    getCourses: true
   });
   const getLocation = e => {
     let location = null,
@@ -45,29 +46,28 @@ const Courses = props => {
   };
 
   useEffect(() => {
-    let { latitude, longitude } = state;
-    if (!courses.length) {
+    let { latitude, longitude, getCourses } = state;
+    if (getCourses) {
       fetch("https://a-tracker.herokuapp.com/courses", {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          "access-token": "SnsRKjHXwHVQFvxjh_f7pg",
-          client: "zv1Y0B-2SkqwVTD4u_h8Kg",
-          uid: "doctor2@fci-cu.edu.eg",
-          "token-type": "Bearer",
-          expiry: "1597497091"
+          "access-token": localStorage.getItem("accessToken"),
+          client: localStorage.getItem("client"),
+          uid: localStorage.getItem("uid"),
+          "token-type": localStorage.getItem("tokenType"),
+          expiry: localStorage.getItem("expiry")
         }
       })
         .then(response => response.json())
         .then(response => {
           console.log(response);
-          setState({ ...state, courses: response });
+          setState({ ...state, courses: response, getCourses: false });
         })
         .catch(err => console.log(err));
     }
     if (!latitude || !longitude) getLocation();
   });
-
   const createQrCode = (id, hash) => {
     const { longitude, latitude, checked } = state;
     const { history } = props;
