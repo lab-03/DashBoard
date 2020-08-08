@@ -1,0 +1,6 @@
+.bottomRightImage {
+  position: fixed;
+  z-index: -1;
+  top: 450px;
+  width: 52.5%;
+}

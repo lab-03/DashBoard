@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./coursesList.css";
 import Course from "../course/course";
 import {
   List,
@@ -16,28 +17,16 @@ import {
 
 const Courses = props => {
   const [state, setState] = useState({
-    courses: [
-      {
-        title: "Introduction to CS",
-        code: "CS-123"
-      },
-      {
-        title: "ML",
-        code: "CS-255"
-      },
-      {
-        title: "OOP",
-        code: "CS-124"
-      }
-    ],
+    courses: [],
     longitude: null,
     latitude: null,
     newCourse: {
-      title: "",
-      code: ""
+      name: "",
+      id: ""
     },
     checked: false,
-    openDialog: false
+    openDialog: false,
+    getCourses: true
   });
   const getLocation = e => {
     let location = null,
@@ -57,11 +46,29 @@ const Courses = props => {
   };
 
   useEffect(() => {
-    let { latitude, longitude } = state;
+    let { latitude, longitude, getCourses } = state;
+    if (getCourses) {
+      fetch("https://a-tracker.herokuapp.com/courses", {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "access-token": localStorage.getItem("accessToken"),
+          client: localStorage.getItem("client"),
+          uid: localStorage.getItem("uid"),
+          "token-type": localStorage.getItem("tokenType"),
+          expiry: localStorage.getItem("expiry")
+        }
+      })
+        .then(response => response.json())
+        .then(response => {
+          console.log(response);
+          setState({ ...state, courses: response, getCourses: false });
+        })
+        .catch(err => console.log(err));
+    }
     if (!latitude || !longitude) getLocation();
   });
-
-  const createQrCode = (code, hash) => {
+  const createQrCode = (id, hash) => {
     const { longitude, latitude, checked } = state;
     const { history } = props;
     console.log({ longitude, latitude });
@@ -93,7 +100,7 @@ const Courses = props => {
         .then(response => {
           let re = new RegExp("/", "g");
           let imageUrl = response.data.replace(re, "%2f");
-          history.push(`/home/qr/${code}/${imageUrl}/${hash}`);
+          history.push(`/home/qr/${id}/${imageUrl}/${hash}`);
         })
         .catch(err => {
           console.log(err);
@@ -107,61 +114,103 @@ const Courses = props => {
     setState({ ...state, openDialog: true });
   };
   const handleClose = () => {
-    setState({ ...state, openDialog: false });
+    setState({
+      ...state,
+      openDialog: false,
+      newCourse: { name: "", id: "" }
+    });
   };
   const handleSubmit = () => {
     const { courses, newCourse } = state;
-    let newCourses = courses;
-    newCourses.push(newCourse);
-    setState({ ...state, courses: newCourses });
-    setState({ ...state, newCourse: { title: "", code: "" } });
-    handleClose();
+    if (!newCourse.name || !newCourse.id) {
+      alert("You must enter a course name and a course id");
+    } else {
+      let check = courses.filter(course => {
+        return course.id === newCourse.id;
+      });
+      if (check.length) {
+        alert("There exists a course with the same id");
+      } else {
+        let newCourses = courses;
+        newCourses.push(newCourse);
+        setState({
+          ...state,
+          courses: newCourses
+        });
+        handleClose();
+      }
+    }
   };
   const newCourseHandler = e => {
-    let target = e.target.name;
-    const prev = state.newCourse;
-    prev[target] = e.target.value;
-    const updated = { ...state, newCourse: prev };
-    setState(updated);
+    let target = e.target.name; //name or id to be updated
+    let prev = state.newCourse; // prev newCourse
+    prev[target] = e.target.value; // update the name or the id depending on which has been updated
+    setState({ ...state, newCourse: prev });
   };
 
   const { openDialog, newCourse, courses, checked } = state;
-
   return (
-    <div className="center">
-      <Grid item xs={12} md={9}>
-        <h3 variant="h6">My Courses</h3>
+    <div>
+      <div className="flex">
         <div>
-          <div className="center">
-            <FormControlLabel
-              value="start"
-              control={<Checkbox color="primary" />}
-              label="Disable extra checks"
-              labelPlacement="end"
-              onChange={handleCheckboxClick}
-            />
-          </div>
-          <List>
-            {courses.map(course => (
-              <Course
-                key={course.code}
-                code={course.code}
-                title={course.title}
-                createQrCode={createQrCode}
-              />
-            ))}
-          </List>
-          <Button
-            className="shadow grow ma5"
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={handleClickOpen}
-          >
-            <p className="fw7-ns">Add New Course</p>
-          </Button>
+          <img className="w-30 mr7" alt="myCourses" src="myCoruses.png" />
         </div>
-      </Grid>
+        <div>
+          <FormControlLabel
+            value="start"
+            control={<Checkbox color="primary" />}
+            label="Disable extra checks"
+            labelPlacement="end"
+            style={{
+              color: "#7f7aea",
+              fontFamily: ["Cairo", "sans-serif"],
+              marginLeft: "180px"
+            }}
+            onChange={handleCheckboxClick}
+          />
+        </div>
+      </div>
+      <div className="mw-100">
+        <Grid item xs={12} md={11}>
+          <div className="ml5">
+            <List>
+              {courses.map(course => {
+                console.log({ courseName: course.name, id: course.id });
+                return (
+                  <Course
+                    key={course.id}
+                    id={course.id}
+                    name={course.name}
+                    createQrCode={createQrCode}
+                  />
+                );
+              })}
+            </List>
+            <Button
+              className="shadow grow ma5"
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={handleClickOpen}
+              style={{
+                background: "#faa551",
+                borderRadius: "0px",
+                width: "10%",
+                textTransform: "none"
+              }}
+            >
+              <p
+                className=""
+                style={{
+                  fontSize: "120%"
+                }}
+              >
+                Add Course
+              </p>
+            </Button>
+          </div>
+        </Grid>
+      </div>
       <Dialog
         open={openDialog}
         onClose={handleClose}
@@ -170,17 +219,16 @@ const Courses = props => {
         <DialogTitle id="form-dialog-title">ADD NEW COURSE</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To Add an new Course please enter the course Title and the course
-            ID.
+            To Add an new Course please enter the course name and the course id.
           </DialogContentText>
           <div>
             <TextField
               autoFocus
               margin="dense"
-              label="Title"
-              name="title"
+              label="name"
+              name="name"
               type="text"
-              value={newCourse.title}
+              value={newCourse.name}
               required
               fullWidth
               InputLabelProps={{
@@ -190,10 +238,10 @@ const Courses = props => {
             />
             <TextField
               margin="dense"
-              name="code"
-              label="code"
+              name="id"
+              label="id"
               type="text"
-              value={newCourse.code}
+              value={newCourse.id}
               fullWidth
               InputLabelProps={{
                 shrink: true
@@ -208,10 +256,17 @@ const Courses = props => {
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            Subscribe
+            Add
           </Button>
         </DialogActions>
       </Dialog>
+      <div className="flex justify-end">
+        <img
+          className="bottomRightImage"
+          alt="bottomRight"
+          src="bottomRight.png"
+        />
+      </div>
     </div>
   );
 };
