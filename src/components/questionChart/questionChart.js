@@ -6,12 +6,18 @@ const QuestionChart = ({ question }) => {
     labels: [question.answer_1, question.answer_2, question.answer_3],
     datasets: [
       {
-        label: "# of Votes",
+        label: "# of Correct votes",
+        backgroundColor: ["rgb(34,139,34)"],
+        borderColor: [],
+        borderWidth: 1
+      },
+      {
+        label: "# of wrong Votes",
         data: [19, 15, 10],
         backgroundColor: [
-          "rgba(255, 99, 132)",
-          "rgba(255, 99, 132)",
-          "rgba(255, 99, 132)"
+          "rgb(255, 99, 132)",
+          "rgb(255, 99, 132)",
+          "rgb(255, 99, 132)"
         ],
         borderColor: [],
         borderWidth: 1
@@ -22,7 +28,7 @@ const QuestionChart = ({ question }) => {
   let withGreen = state;
   let correctAnswerNumber = question.correctAnswer.split("#")[1]; // answer#1
   console.log({ question, correctAnswerNumber });
-  withGreen.datasets[0].backgroundColor[correctAnswerNumber - 1] =
+  withGreen.datasets[1].backgroundColor[correctAnswerNumber - 1] =
     "rgb(34,139,34)";
   return (
     <Bar
