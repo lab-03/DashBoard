@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Input,
-  InputLabel,
-  FormControl,
-  MenuItem,
-  Select
-} from "@material-ui/core";
+import { InputLabel, FormControl, MenuItem, Select } from "@material-ui/core";
 
 const SessionSelector = ({ getStat, sessions }) => {
   const [state, setState] = useState({

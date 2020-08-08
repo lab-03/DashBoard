@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LogOut from "../logout/LogOut";
 import SessionSelector from "../SessionSelector/SessionSelector";
+import QuestionsChart from "../questionChart/questionChart";
 import "./courseStatPage.css";
 const CourseStat = props => {
   const [state, setState] = useState({
@@ -55,27 +56,43 @@ const CourseStat = props => {
           backgroundColor: "rgb(0,0,0,0.1)"
         }}
       >
-        <button
-          class="fa fa-caret-left"
-          style={{
-            fontSize: "100px",
-            border: "0px",
-            backgroundColor: "transparent",
-            cursor: "pointer",
-            color: "#faa551"
-          }}
-        ></button>
-        asdasfasf
-        <button
-          class="fa fa-caret-right"
-          style={{
-            fontSize: "100px",
-            border: "0px",
-            backgroundColor: "transparent",
-            cursor: "pointer",
-            color: "#faa551"
-          }}
-        ></button>
+        <div className="flex justify-around center">
+          <button
+            className="fa fa-caret-left grow"
+            value="left"
+            style={{
+              fontSize: "100px",
+              border: "0px",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              color: "#faa551",
+              outline: "none"
+            }}
+          ></button>
+          <div className=" w-40">
+            <QuestionsChart
+              question={{
+                title: "teat",
+                answer_1: "asta",
+                answer_2: "aeta",
+                answer_3: "asta",
+                correctAnswer: null
+              }}
+            />
+          </div>
+          <button
+            className="fa fa-caret-right grow"
+            value="right"
+            style={{
+              fontSize: "100px",
+              border: "0px",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              color: "#faa551",
+              outline: "none"
+            }}
+          ></button>
+        </div>
       </div>
     </div>
   );
