@@ -61,33 +61,39 @@ const Courses = props => {
       })
         .then(response => response.json())
         .then(response => {
-          console.log(response);
           setState({ ...state, courses: response, getCourses: false });
         })
         .catch(err => console.log(err));
     }
     if (!latitude || !longitude) getLocation();
   });
-  const createQrCode = (id, hash) => {
+  const createQrCode = id => {
     const { longitude, latitude, checked } = state;
     const { history } = props;
-    console.log({ longitude, latitude });
 
     if ((!latitude || !longitude) && !checked) {
       alert(
         "You must allow access to your location in order to generate a valid QrCode"
       );
     } else {
-      fetch("https://gp-verifier.herokuapp.com/api/qrcodes/create", {
+      fetch("https://a-tracker.herokuapp.com/sessions", {
         method: "post",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "access-token": localStorage.getItem("accessToken"),
+          client: localStorage.getItem("client"),
+          uid: localStorage.getItem("uid"),
+          "token-type": localStorage.getItem("tokenType"),
+          expiry: localStorage.getItem("expiry")
         },
         body: JSON.stringify({
-          hash,
-          applyChecks: !checked,
-          longitude,
-          latitude
+          session: {
+            classable_id: id,
+            classable_type: "Course",
+            applyChecks: !checked,
+            long: longitude,
+            lat: latitude
+          }
         })
       })
         .then(response => {
@@ -98,8 +104,10 @@ const Courses = props => {
           }
         })
         .then(response => {
+          console.log(response);
           let re = new RegExp("/", "g");
-          let imageUrl = response.data.replace(re, "%2f");
+          let imageUrl = response.qr_code_base64.replace(re, "%2f");
+          let hash = response.token;
           history.push(`/home/qr/${id}/${imageUrl}/${hash}`);
         })
         .catch(err => {
@@ -175,7 +183,6 @@ const Courses = props => {
           <div className="ml5">
             <List>
               {courses.map(course => {
-                console.log({ courseName: course.name, id: course.id });
                 return (
                   <Course
                     key={course.id}

@@ -1,6 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import crypto from "crypto";
 import {
   ListItem,
   ListItemSecondaryAction,
@@ -10,12 +9,6 @@ import {
 } from "@material-ui/core";
 
 const Course = ({ id, name, createQrCode }) => {
-  const [state] = useState({
-    id,
-    name,
-    hash: crypto.randomBytes(20).toString("hex")
-  });
-  const { hash } = state;
   return (
     <Fragment>
       <ListItem>
@@ -68,7 +61,7 @@ const Course = ({ id, name, createQrCode }) => {
               fontFamily: ["Cairo", "sans-serif"],
               textTransform: "none"
             }}
-            onClick={() => createQrCode(id, hash)}
+            onClick={() => createQrCode(id)}
           >
             <p
               className="pl2 pr2"

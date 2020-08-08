@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import "./QrCode.css";
 import DashBoard from "../DashBoard/DashBoard";
@@ -10,7 +10,7 @@ import LogOut from "../logout/LogOut";
 
 const QrCode = props => {
   let { imageUrl, hash } = props.match.params;
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     hide: false,
     openDialog: false,
     attendees: [],
