@@ -3,6 +3,8 @@ import background from "../../4.jpg";
 import shapee from "../../shape1.png";
 import { withStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
+import auth from "../../auth";
+import SignUp from "./SignUp";
 
 import {
   Button,
@@ -114,6 +116,7 @@ let SignUpStyle = {
   border: "0px solid #E8E8E8",
   fontFamily: "Arial",
 };
+
 const Signin = (props) => {
   const [info, setInfo] = useState({
     Email: "",
@@ -137,12 +140,18 @@ const Signin = (props) => {
   };
   const ButtonHandler = (e) => {
     e.preventDefault();
-    props.history.push("/home");
-    toast.success(`Welcome ${info.Email} ! `);
+    //props.history.push("/home");
+
+    auth.login(info.Email, info.Password, () => {
+      props.history.push("/home");
+      toast.success(`Welcome ${localStorage.getItem("firstName")} ! `);
+    });
   };
   const SignUpButtonHandler = () => {
-    props.history.push("/home");
-    toast.success(`Welcome ${info.Email} ! `);
+    SignUp.SignUp(info.FirstName, info.LastName, info.EmailS, info.PasswordS);
+    handleClose();
+    // props.history.push("/home");
+    //toast.success(`Welcome ${info.Email} ! `);
   };
 
   return (
@@ -155,6 +164,7 @@ const Signin = (props) => {
             //borderRadius: "130px",
           }}
         ></div>
+
         <img src={shapee} alt="box" style={shapeStyle} />
 
         <form>
@@ -205,8 +215,8 @@ const Signin = (props) => {
               />
               <TextField
                 margin="dense"
-                name="SecondName"
-                label="SecondName"
+                name="LastName"
+                label="LastName"
                 type="text"
                 value={info.SecondName}
                 fullWidth

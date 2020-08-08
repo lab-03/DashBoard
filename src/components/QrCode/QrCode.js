@@ -6,6 +6,7 @@ import QuestionDialog from "../questionDialog/questionDialog";
 import { Button } from "@material-ui/core";
 import io from "socket.io-client";
 import bottomLeftImage from "./bottomLeft.png";
+import LogOut from "../logout/LogOut";
 
 const QrCode = props => {
   let { imageUrl, hash } = props.match.params;
