@@ -1,4 +1,3 @@
-import auth from "../../auth";
 var axios = require("axios");
 class SignInAuth {
   constructor() {

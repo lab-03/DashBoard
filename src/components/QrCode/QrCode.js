@@ -3,14 +3,15 @@ import "./QrCode.css";
 import DashBoard from "../DashBoard/DashBoard";
 import { Button } from "@material-ui/core";
 import socketIO from "socket.io-client";
+import LogOut from "../logout/LogOut";
 
-const QrCode = props => {
+const QrCode = (props) => {
   let { imageUrl, hash } = props.match.params;
   const [state, setState] = React.useState({
     hide: false,
     attendees: [],
     socket: socketIO.connect("http://localhost:8888", { autoConnect: false }),
-    listening: false
+    listening: false,
   });
 
   useEffect(() => {
@@ -24,12 +25,12 @@ const QrCode = props => {
           console.log("Socket Connected", socket.id);
           socket.emit("hash", { hash });
         })
-        .on("attendees", attendees => {
+        .on("attendees", (attendees) => {
           setState({ ...state, attendees });
         })
-        .on(hash, newAttendee => {
+        .on(hash, (newAttendee) => {
           console.log({ hash, newAttendee });
-          setState(prevState => {
+          setState((prevState) => {
             const attendees = [...prevState.attendees];
             attendees.push(newAttendee);
             return { ...prevState, attendees };
@@ -43,7 +44,7 @@ const QrCode = props => {
     }
   }, [state, hash]);
 
-  const onAttendeeAdd = newAttendee => {
+  const onAttendeeAdd = (newAttendee) => {
     if (!newAttendee.name || !newAttendee.id)
       return alert("a name and an id must be provided");
     let socket = socketIO.connect("http://localhost:8888");
@@ -82,7 +83,7 @@ const QrCode = props => {
       .emit("update", { oldAttendee, updatedAttendee })
       .on("updated", () => {
         console.log(`${{ oldAttendee }} updated to ${{ updatedAttendee }}`);
-        setState(prevState => {
+        setState((prevState) => {
           const attendees = [...prevState.attendees];
           console.log(attendees);
           attendees[id] = updatedAttendee;
@@ -101,7 +102,7 @@ const QrCode = props => {
       });
   };
 
-  const onAttendeeDelete = attendee => {
+  const onAttendeeDelete = (attendee) => {
     let attendeeTemp = JSON.parse(JSON.stringify(attendee));
     delete attendeeTemp.tableData;
     let socket = socketIO.connect("http://localhost:8888");
@@ -112,7 +113,7 @@ const QrCode = props => {
       .emit("delete", { attendeeTemp })
       .on("deleted", () => {
         console.log(attendeeTemp, "deleted");
-        setState(prevState => {
+        setState((prevState) => {
           const attendees = [...prevState.attendees];
           attendees.splice(attendees.indexOf(attendee), 1);
           return { ...prevState, attendees };
@@ -129,19 +130,19 @@ const QrCode = props => {
       });
   };
 
-  const endQrCode = hash => {
+  const endQrCode = (hash) => {
     fetch("http://localhost:8888/api/qrcodes/end", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        hash
-      })
+        hash,
+      }),
     })
-      .then(response => response.json())
-      .then(response => {
+      .then((response) => response.json())
+      .then((response) => {
         setState({ ...state, hide: true });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
   let { hide, attendees } = state;
   return (
@@ -207,6 +208,7 @@ const QrCode = props => {
           </div>
         </div>
       ) : null}
+      <LogOut history={props.history} />
     </div>
   );
 };

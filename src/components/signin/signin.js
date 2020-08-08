@@ -161,6 +161,7 @@ const Signin = (props) => {
             //borderRadius: "130px",
           }}
         ></div>
+
         <img src={shapee} alt="box" style={shapeStyle} />
 
         <form>
