@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import LogOut from "../logout/LogOut";
 import SessionSelector from "../SessionSelector/SessionSelector";
-import QuestionsChart from "../questionChart/questionChart";
+import StatChart from "../StatChart/StatChart";
+import StatNumber from "../StatNumber/StatNumber";
 import "./courseStatPage.css";
+import topLeftImage from "./topLeft.png";
+
 const CourseStat = props => {
   const [state, setState] = useState({
     sessions: [
@@ -10,7 +13,34 @@ const CourseStat = props => {
       { id: "2", date: "Sun Aug 09 2020 23:48:36" },
       { id: "3", date: "Mon Aug 10 2020 23:48:36" }
     ],
-    getSessions: true
+    getSessions: true,
+    chartsData: [
+      {
+        id: "1",
+        labels: ["1", "2", "3"],
+        dataSetLabel: "lorem epsum",
+        data: [10, 60, 15],
+        title: "first",
+        chartType: "bar"
+      },
+      {
+        id: "2",
+        labels: ["1", "2", "3"],
+        dataSetLabel: "lorem epsum",
+        data: [10, 30, 10],
+        title: "second",
+        chartType: "line"
+      },
+      {
+        id: "3",
+        labels: ["1", "2", "3"],
+        dataSetLabel: "lorem epsum",
+        data: [10, 100, 15],
+        title: "third",
+        chartType: "bar"
+      }
+    ],
+    currentChartId: "0"
   });
   useEffect(() => {
     let { getSessions } = state;
@@ -23,7 +53,20 @@ const CourseStat = props => {
     console.log(id);
   };
 
-  let { sessions } = state;
+  const handleClickNext = () => {
+    let next = (state.currentChartId + 1) % state.chartsData.length;
+    setState({ ...state, currentChartId: next });
+  };
+
+  const handleClickPrev = () => {
+    let prev =
+      (state.currentChartId - 1 + state.chartsData.length) %
+      state.chartsData.length;
+    setState({ ...state, currentChartId: prev });
+  };
+
+  let { sessions, chartsData, currentChartId } = state;
+  console.log(chartsData[currentChartId]);
   return (
     <div
       style={{
@@ -33,11 +76,15 @@ const CourseStat = props => {
       <div className="flex">
         <LogOut history={props.history} />
         <div>
-          <img className="w-30 mr7" alt="myCourses" src="myCoruses.png" />
+          <img
+            className="w-30 topLeftImage"
+            alt="topLeftImage"
+            src={topLeftImage}
+          />
         </div>
       </div>
       <div className="flex">
-        <div className="mt4 ml4">
+        <div className="ml4">
           <SessionSelector sessions={sessions} getStat={getStat} />
         </div>
         <div
@@ -47,7 +94,7 @@ const CourseStat = props => {
             marginTop: "1%"
           }}
         >
-          stats
+          <StatNumber text="stats" value="60" />
         </div>
       </div>
       <div
@@ -59,6 +106,7 @@ const CourseStat = props => {
         <div className="flex justify-around center">
           <button
             className="fa fa-caret-left grow"
+            onClick={handleClickPrev}
             value="left"
             style={{
               fontSize: "100px",
@@ -70,18 +118,17 @@ const CourseStat = props => {
             }}
           ></button>
           <div className=" w-40">
-            <QuestionsChart
-              question={{
-                title: "teat",
-                answer_1: "asta",
-                answer_2: "aeta",
-                answer_3: "asta",
-                correctAnswer: null
-              }}
+            <StatChart
+              chartData={chartsData[currentChartId]}
+              type={chartsData[currentChartId].chartType}
+              colors={chartsData[currentChartId].labels.map(label => {
+                return "#7f7aea";
+              })}
             />
           </div>
           <button
             className="fa fa-caret-right grow"
+            onClick={handleClickNext}
             value="right"
             style={{
               fontSize: "100px",

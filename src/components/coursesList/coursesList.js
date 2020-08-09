@@ -161,7 +161,7 @@ const Courses = props => {
     <div>
       <div className="flex">
         <div>
-          <img className="w-30 mr7" alt="myCourses" src="myCoruses.png" />
+          <img className="w-30 mr7" alt="myCourses" src="myCourses.png" />
         </div>
         <div>
           <FormControlLabel
