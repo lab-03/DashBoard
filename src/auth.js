@@ -23,7 +23,8 @@ class Auth {
   }
 
   isAuthenticated() {
-    return localStorage.getItem("accessToken") !== undefined;
+    console.log(localStorage.getItem("accessToken"));
+    return localStorage.getItem("accessToken") != undefined;
   }
 }
 
