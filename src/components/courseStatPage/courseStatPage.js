@@ -40,7 +40,53 @@ const CourseStat = props => {
         chartType: "bar"
       }
     ],
-    currentChartId: "0"
+    currentChartId: "0",
+    stats: [
+      {
+        title: "test",
+        value: "50%"
+      },
+      {
+        title: "test1",
+        value: "50"
+      },
+      {
+        title: "test2",
+        value: "60"
+      },
+      {
+        title: "test3",
+        value: "43%"
+      },
+      {
+        title: "test",
+        value: "50%"
+      },
+      {
+        title: "test1",
+        value: "50"
+      },
+      {
+        title: "test2",
+        value: "60"
+      },
+      {
+        title: "test3",
+        value: "43%"
+      },
+      {
+        title: "test1",
+        value: "50"
+      },
+      {
+        title: "test2",
+        value: "60"
+      },
+      {
+        title: "test3",
+        value: "43%"
+      }
+    ]
   });
   useEffect(() => {
     let { getSessions } = state;
@@ -65,7 +111,7 @@ const CourseStat = props => {
     setState({ ...state, currentChartId: prev });
   };
 
-  let { sessions, chartsData, currentChartId } = state;
+  let { sessions, chartsData, currentChartId, stats } = state;
   console.log(chartsData[currentChartId]);
   return (
     <div
@@ -94,7 +140,11 @@ const CourseStat = props => {
             marginTop: "1%"
           }}
         >
-          <StatNumber text="stats" value="60" />
+          <div className="center w-70 flex justify-around flex-wrap-ns">
+            {stats.map(stat => {
+              return <StatNumber className="center" stat={stat} />;
+            })}
+          </div>
         </div>
       </div>
       <div

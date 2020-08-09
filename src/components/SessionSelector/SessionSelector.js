@@ -27,7 +27,6 @@ const SessionSelector = ({ getStat, sessions }) => {
           id="sessions"
           style={{
             color: "#7f7aea",
-            width: "180px",
             fontFamily: ["Cairo", "sans-serif"],
             textTransform: "none",
             fontSize: "120%"

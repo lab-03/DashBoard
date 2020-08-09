@@ -1,8 +1,8 @@
 import React from "react";
 
-const StatNumber = ({ text, value }) => {
+const StatNumber = ({ stat }) => {
   return (
-    <div>
+    <div className="ma3">
       <span
         style={{
           fontFamily: ["Cairo", "sans-serif"],
@@ -10,16 +10,17 @@ const StatNumber = ({ text, value }) => {
           fontSize: "120%"
         }}
       >
-        {text}
+        {stat.title}
       </span>
       <div
         style={{
           fontFamily: ["Alfa Slab One", "cursive"],
           color: "#7f7aea",
-          fontSize: "200%"
+          fontSize: "200%",
+          marginLeft: "2%"
         }}
       >
-        {value}
+        {stat.value}
       </div>
     </div>
   );
