@@ -44,7 +44,10 @@ const QrCode = props => {
           })
           .on("disconnect", () => {
             console.log(`disconnected from server`);
-            setState({ ...state, listening: false });
+            setState(prevState => {
+              const attendees = [...prevState.attendees];
+              return { ...prevState, attendees, listening: false };
+            });
           });
       }
       socket.connect();
@@ -71,10 +74,10 @@ const QrCode = props => {
         socket.emit("add", { hash, newAttendee });
       })
       .on("addition succeeded", newAttendee => {
-        console.log("addition succeeded", newAttendee);
+        console.log("addition succeeded", newAttendee.attendee);
         setState(prevState => {
           const attendees = [...prevState.attendees];
-          attendees.push(newAttendee);
+          attendees.push(newAttendee.attendee);
           return { ...prevState, attendees };
         });
         console.log(`disconnecting socket ${socket.id}`);
