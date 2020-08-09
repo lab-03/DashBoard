@@ -313,6 +313,33 @@ const QrCode = props => {
                 </p>
               </Button>
             </div>
+            <span className="ma2"></span>
+
+            <div className="center">
+              <Button
+                variant="contained"
+                className="grow shadow"
+                color="primary"
+                onClick={handleClickOpen}
+                style={{
+                  background: "#7f7aea",
+                  borderRadius: "0px",
+                  width: "60%",
+                  height: "50px",
+                  fontFamily: ["Cairo", "sans-serif"],
+                  textTransform: "none"
+                }}
+              >
+                <p
+                  className="pl2 pr2"
+                  style={{
+                    fontSize: "120%"
+                  }}
+                >
+                  Ask a Question
+                </p>
+              </Button>
+            </div>
           </div>
         ) : null}
       </div>

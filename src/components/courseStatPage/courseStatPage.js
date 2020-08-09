@@ -4,7 +4,7 @@ import SessionSelector from "../SessionSelector/SessionSelector";
 import StatChart from "../StatChart/StatChart";
 import StatNumber from "../StatNumber/StatNumber";
 import "./courseStatPage.css";
-import topLeftImage from "./topLeft.png";
+// import topLeftImage from "./topLeft.png";
 
 const CourseStat = props => {
   const [state, setState] = useState({
