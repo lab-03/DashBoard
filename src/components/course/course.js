@@ -23,7 +23,7 @@ const Course = ({ id, name, createQrCode }) => {
           }}
         />
         <ListItemSecondaryAction>
-          <Link to={`/home/course/${id}`} className="link">
+          <Link to={`/home/course/${name}/${id}`} className="link">
             <Button
               className="shadow grow"
               color="primary"

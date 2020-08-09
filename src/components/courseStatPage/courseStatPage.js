@@ -119,18 +119,29 @@ const CourseStat = props => {
         backgroundColor: "rgb(0,0,0,0.1)"
       }}
     >
+      <span
+        className="center"
+        style={{
+          color: "#faa551",
+          fontSize: "150%",
+          bold: true,
+          fontFamily: ["Cairo", "sans-serif"]
+        }}
+      >
+        {props.match.params.name + "'s Course Statistics"}
+      </span>
       <div className="flex">
         <LogOut history={props.history} />
-        <div>
+        {/* <div>
           <img
-            className="w-30 topLeftImage"
+            className="w-50 topLeftImage"
             alt="topLeftImage"
             src={topLeftImage}
           />
-        </div>
+        </div> */}
       </div>
       <div className="flex">
-        <div className="ml4">
+        <div className="ml4 mt6">
           <SessionSelector sessions={sessions} getStat={getStat} />
         </div>
         <div
