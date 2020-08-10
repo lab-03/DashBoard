@@ -13,6 +13,7 @@ Chart.plugins.register({
 });
 
 const QuestionChart = ({ question, data }) => {
+  console.log("re: ", data);
   const [state] = useState({
     labels: [question.answer_1, question.answer_2, question.answer_3],
     datasets: [

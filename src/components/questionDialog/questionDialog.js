@@ -28,40 +28,50 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
     showChart: false,
     openDialog,
     handleClose,
-    messaging: null,
-    chartData: []
+    chartData: [0, 0, 0]
   });
   const initFcm = () => {
-    if (!firebase.apps.length) {
-      const firebaseConfig = {
-        apiKey: "AIzaSyAjvwUbAOVEFurP4YWKyAil7tO7yUEywys",
-        authDomain: "attendance-tracker-2ae99.firebaseapp.com",
-        databaseURL: "https://attendance-tracker-2ae99.firebaseio.com",
-        projectId: "attendance-tracker-2ae99",
-        storageBucket: "attendance-tracker-2ae99.appspot.com",
-        messagingSenderId: "31866390285",
-        appId: "1:31866390285:web:73c581b10481bb3ccd1244",
-        measurementId: "G-EX0YD2QT78"
-      };
-      firebase.initializeApp(firebaseConfig);
-      const messaging = firebase.messaging();
-      messaging.usePublicVapidKey(
-        "BBlRC7Gk3e52FAUzTI9t5A04hLV3rN6mAfC6qAr8lKqVJHQ0aAITl6xUlQyeM2ToGF3BOTO-FdiT696uaKQWQT0"
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWxPfb1pBzZbbFfbWmA5x1kaS8TmHOb5k",
+      authDomain: "testing-26ab5.firebaseapp.com",
+      databaseURL: "https://testing-26ab5.firebaseio.com",
+      projectId: "testing-26ab5",
+      storageBucket: "testing-26ab5.appspot.com",
+      messagingSenderId: "413945079231",
+      appId: "1:413945079231:web:eb9ff457f4379002bc6d0a",
+      measurementId: "G-J70QY249DP"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+    messaging.usePublicVapidKey(
+      "BBcQVKS01-ZJAsvD1MbUHaSAUQwsoOBFQFTrJZmmeHa_GJcxriw68PVy_Eq-T-aZEBUbcYJmRqp7Q1Vp1BlhaSg"
+    );
+    messaging
+      .requestPermission()
+      .then(async function() {
+        console.log("permission granted");
+        const token = await messaging.getToken();
+        console.log(token);
+        // sendTokenToServer(token);
+        return token;
+      })
+      .catch(function(err) {
+        console.log("Unable to get permission to notify.", err);
+      });
+    messaging.onMessage(payload => console.log("Message received. ", payload));
+    navigator.serviceWorker.addEventListener("message", message => {
+      // console.log(message);
+      console.log(
+        message.data["firebase-messaging-msg-data"].notification.body
       );
-      messaging
-        .requestPermission()
-        .then(async function() {
-          console.log("permission granted");
-          const token = await messaging.getToken();
-          console.log(token);
-          sendTokenToServer(token);
-          return token;
-        })
-        .catch(function(err) {
-          console.log("Unable to get permission to notify.", err);
-        });
-    }
-    setState({ ...state, messaging: firebase.messaging() });
+      let answerNumber =
+        message.data["firebase-messaging-msg-data"].notification.body;
+      let { chartData } = state;
+      chartData[answerNumber - 1] += 1;
+      console.log(chartData);
+      setState({ ...state, showChart: true, chartData });
+    });
+    console.log({ messaging });
   };
   const sendTokenToServer = token => {
     fetch("https://a-tracker.herokuapp.com/users/add_device_token", {
@@ -93,8 +103,6 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
       });
   };
   const handleSubmit = question => {
-    let { messaging } = state;
-    messaging.onMessage(payload => console.log("Message received. ", payload));
     if (
       !question.title ||
       !question.answer_1 ||
@@ -128,8 +136,7 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
   };
 
   useEffect(() => {
-    let { messaging } = state;
-    if (messaging === null) {
+    if (!firebase.apps.length) {
       initFcm();
     }
   });
