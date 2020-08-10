@@ -1,6 +1,20 @@
-.bottomLeftImage {
+/* .bottomLeftImage {
   position: fixed;
   width: 50%;
   top: 400px;
   z-index: -1;
+} */
+
+.main {
+  min-height: calc(90vh - 70px);
+  margin-bottom: -50px;
+}
+
+.Footer {
+  /* width: 52.5%;
+
+  margin-left: 48%;
+  margin-top: 19%; */
+  margin-top: -19.3%;
+  margin-right: 48%;
 }
