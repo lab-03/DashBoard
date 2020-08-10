@@ -31,21 +31,20 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
     chartData: [0, 0, 0]
   });
   const initFcm = () => {
+    console.log(process.env);
     const firebaseConfig = {
-      apiKey: "AIzaSyAjvwUbAOVEFurP4YWKyAil7tO7yUEywys",
-      authDomain: "attendance-tracker-2ae99.firebaseapp.com",
-      databaseURL: "https://attendance-tracker-2ae99.firebaseio.com",
-      projectId: "attendance-tracker-2ae99",
-      storageBucket: "attendance-tracker-2ae99.appspot.com",
-      messagingSenderId: "31866390285",
-      appId: "1:31866390285:web:73c581b10481bb3ccd1244",
-      measurementId: "G-EX0YD2QT78"
+      apiKey: process.env.REACT_APP_apiKey,
+      authDomain: process.env.REACT_APP_authDomain,
+      databaseURL: process.env.REACT_APP_databaseURL,
+      projectId: process.env.REACT_APP_projectId,
+      storageBucket: process.env.REACT_APP_storageBucket,
+      messagingSenderId: process.env.REACT_APP_messagingSenderId,
+      appId: process.env.REACT_APP_appId,
+      measurementId: process.env.REACT_APP_measurementId
     };
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
-    messaging.usePublicVapidKey(
-      "BBlRC7Gk3e52FAUzTI9t5A04hLV3rN6mAfC6qAr8lKqVJHQ0aAITl6xUlQyeM2ToGF3BOTO-FdiT696uaKQWQT0"
-    );
+    messaging.usePublicVapidKey(process.env.REACT_APP_apiPubKey);
     messaging
       .requestPermission()
       .then(async function() {
