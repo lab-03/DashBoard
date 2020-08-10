@@ -32,19 +32,19 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
   });
   const initFcm = () => {
     const firebaseConfig = {
-      apiKey: "AIzaSyDWxPfb1pBzZbbFfbWmA5x1kaS8TmHOb5k",
-      authDomain: "testing-26ab5.firebaseapp.com",
-      databaseURL: "https://testing-26ab5.firebaseio.com",
-      projectId: "testing-26ab5",
-      storageBucket: "testing-26ab5.appspot.com",
-      messagingSenderId: "413945079231",
-      appId: "1:413945079231:web:eb9ff457f4379002bc6d0a",
-      measurementId: "G-J70QY249DP"
+      apiKey: "AIzaSyAjvwUbAOVEFurP4YWKyAil7tO7yUEywys",
+      authDomain: "attendance-tracker-2ae99.firebaseapp.com",
+      databaseURL: "https://attendance-tracker-2ae99.firebaseio.com",
+      projectId: "attendance-tracker-2ae99",
+      storageBucket: "attendance-tracker-2ae99.appspot.com",
+      messagingSenderId: "31866390285",
+      appId: "1:31866390285:web:73c581b10481bb3ccd1244",
+      measurementId: "G-EX0YD2QT78"
     };
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
     messaging.usePublicVapidKey(
-      "BBcQVKS01-ZJAsvD1MbUHaSAUQwsoOBFQFTrJZmmeHa_GJcxriw68PVy_Eq-T-aZEBUbcYJmRqp7Q1Vp1BlhaSg"
+      "BBlRC7Gk3e52FAUzTI9t5A04hLV3rN6mAfC6qAr8lKqVJHQ0aAITl6xUlQyeM2ToGF3BOTO-FdiT696uaKQWQT0"
     );
     messaging
       .requestPermission()
@@ -52,7 +52,7 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
         console.log("permission granted");
         const token = await messaging.getToken();
         console.log(token);
-        // sendTokenToServer(token);
+        sendTokenToServer(token);
         return token;
       })
       .catch(function(err) {
@@ -61,9 +61,9 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
     messaging.onMessage(payload => console.log("Message received. ", payload));
     navigator.serviceWorker.addEventListener("message", message => {
       // console.log(message);
-      console.log(
-        message.data["firebase-messaging-msg-data"].notification.body
-      );
+      // console.log(
+      //   message.data["firebase-messaging-msg-data"].notification.body
+      // );
       let answerNumber =
         message.data["firebase-messaging-msg-data"].notification.body;
       let { chartData } = state;
