@@ -1,6 +1,6 @@
 import React from "react";
 
-const LogOut = props => {
+const LogOut = (props) => {
   const stylee = {
     position: "fixed",
     right: "10px",
@@ -8,12 +8,13 @@ const LogOut = props => {
     width: "7%",
     color: "white",
     backgroundColor: "#7f7aea",
+
     fontSize: "12px",
     height: "3%",
     cursor: "pointer",
     borderWidth: "0.1px",
     borderColor: "#c2c2c2",
-    border: "0px solid #E8E8E8"
+    border: "0px solid #E8E8E8",
   };
   const buttonHandler = () => {
     localStorage.removeItem("accessToken");

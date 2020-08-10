@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import "./coursesList.css";
 import Course from "../course/course";
+import LogOut from "../logout/LogOut";
 import {
   List,
   Grid,
@@ -104,7 +105,6 @@ const Courses = props => {
           }
         })
         .then(response => {
-          console.log(response);
           let re = new RegExp("/", "g");
           let imageUrl = response.qr_code_base64.replace(re, "%2f");
           let hash = response.token;
@@ -158,123 +158,128 @@ const Courses = props => {
 
   const { openDialog, newCourse, courses, checked } = state;
   return (
-    <div>
-      <div className="flex">
-        <div>
-          <img className="w-30 mr7" alt="myCourses" src="myCourses.png" />
-        </div>
-        <div>
-          <FormControlLabel
-            value="start"
-            control={<Checkbox color="primary" />}
-            label="Disable extra checks"
-            labelPlacement="end"
-            style={{
-              color: "#7f7aea",
-              fontFamily: ["Cairo", "sans-serif"],
-              marginLeft: "180px"
-            }}
-            onChange={handleCheckboxClick}
-          />
-        </div>
-      </div>
-      <div className="mw-100">
-        <Grid item xs={12} md={11}>
-          <div className="ml5">
-            <List>
-              {courses.map(course => {
-                return (
-                  <Course
-                    key={course.id}
-                    id={course.id}
-                    name={course.name}
-                    createQrCode={createQrCode}
-                  />
-                );
-              })}
-            </List>
-            <Button
-              className="shadow grow ma5"
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleClickOpen}
+    <Fragment>
+      <div className="main">
+        <div className="flex">
+          <div>
+            <img className="w-30 mr7" alt="myCourses" src="myCourses.png" />
+          </div>
+          <div className="headers">
+            <LogOut history={props.history} />
+            <FormControlLabel
+              value="start"
+              control={<Checkbox color="primary" />}
+              label="Disable extra checks"
+              labelPlacement="end"
               style={{
-                background: "#faa551",
-                borderRadius: "0px",
-                width: "10%",
-                textTransform: "none"
+                color: "#7f7aea",
+                fontFamily: ["Cairo", "sans-serif"],
+                marginLeft: "180px"
               }}
-            >
-              <p
-                className=""
+              onChange={handleCheckboxClick}
+            />
+          </div>
+        </div>
+        <div className="mw-100">
+          <Grid item xs={12} md={11}>
+            <div className="ml5">
+              <List>
+                {courses.map(course => {
+                  console.log({ courseName: course.name, id: course.id });
+                  return (
+                    <Course
+                      key={course.id}
+                      id={course.id}
+                      name={course.name}
+                      createQrCode={createQrCode}
+                    />
+                  );
+                })}
+              </List>
+              <Button
+                className="shadow grow ma5"
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={handleClickOpen}
                 style={{
-                  fontSize: "120%"
+                  background: "#faa551",
+                  borderRadius: "0px",
+                  width: "10%",
+                  textTransform: "none"
                 }}
               >
-                Add Course
-              </p>
+                <p
+                  className=""
+                  style={{
+                    fontSize: "120%"
+                  }}
+                >
+                  Add Course
+                </p>
+              </Button>
+            </div>
+          </Grid>
+        </div>
+        <Dialog
+          open={openDialog}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">ADD NEW COURSE</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To Add an new Course please enter the course name and the course
+              id.
+            </DialogContentText>
+            <div>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="name"
+                name="name"
+                type="text"
+                value={newCourse.name}
+                required
+                fullWidth
+                InputLabelProps={{
+                  shrink: true
+                }}
+                onChange={newCourseHandler}
+              />
+              <TextField
+                margin="dense"
+                name="id"
+                label="id"
+                type="text"
+                value={newCourse.id}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true
+                }}
+                required
+                onChange={newCourseHandler}
+              />
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
             </Button>
-          </div>
-        </Grid>
+            <Button onClick={handleSubmit} color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
-      <Dialog
-        open={openDialog}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">ADD NEW COURSE</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To Add an new Course please enter the course name and the course id.
-          </DialogContentText>
-          <div>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="name"
-              name="name"
-              type="text"
-              value={newCourse.name}
-              required
-              fullWidth
-              InputLabelProps={{
-                shrink: true
-              }}
-              onChange={newCourseHandler}
-            />
-            <TextField
-              margin="dense"
-              name="id"
-              label="id"
-              type="text"
-              value={newCourse.id}
-              fullWidth
-              InputLabelProps={{
-                shrink: true
-              }}
-              required
-              onChange={newCourseHandler}
-            />
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <div className="flex justify-end">
+      <div className="footer">
         <img
           className="bottomRightImage"
           alt="bottomRight"
           src="bottomRight.png"
         />
       </div>
-    </div>
+    </Fragment>
   );
 };
 

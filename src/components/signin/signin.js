@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import background from "../../4.jpg";
-import shapee from "../../shape1.png";
+import logos1 from "../../logos1.png";
+import home1 from "../../tst11.png";
 import { withStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 import auth from "../../auth";
 import SignUp from "./SignUp";
-
+import "./signin.css";
 import {
   Button,
   Dialog,
@@ -15,109 +15,12 @@ import {
   TextField
 } from "@material-ui/core";
 
-let backStyle = {
-  backgroundImage: `url(${background})`,
-  height: "750px",
-
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundAttachment: "fixed"
-};
-let shapeStyle = {
-  position: "fixed",
-  top: 50,
-  left: 800,
-  width: "45%"
-};
-
-let layer = {
-  backgroundColor: "rgba(0, 0, 0, 0)",
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "750px",
-  backgroundAttachment: "fixed"
-};
-
 const styles = {
   input: {
     color: "white"
   }
 };
-let EmailStyle = {
-  position: "fixed",
-  left: 900,
-  top: 150,
-  width: "32.5%",
-  height: "10%",
 
-  textAlign: "center",
-  fontSize: "20px",
-  borderRadius: "10px",
-  borderWidth: "0.1px",
-  borderColor: "#c2c2c2",
-  backgroundColor: "white",
-
-  border: "2px solid #E8E8E8",
-  fontFamily: "Arial"
-};
-let PasswordStyle = {
-  width: "32.5%",
-  position: "fixed",
-  left: 900,
-  top: 250,
-
-  height: "10%",
-
-  textAlign: "center",
-  fontSize: "20px",
-  borderRadius: "10px",
-  borderWidth: "0.1px",
-  borderColor: "#c2c2c2",
-  backgroundColor: "white",
-
-  border: "2px solid #E8E8E8",
-  fontFamily: "Arial"
-};
-let ButtonStyle = {
-  position: "fixed",
-  left: 900,
-  top: 350,
-  height: "10%",
-  width: "32.5%",
-
-  textAlign: "center",
-  fontSize: "25px",
-  borderRadius: "10px",
-  borderWidth: "0.1px",
-  borderColor: "#c2c2c2",
-  color: "white",
-  backgroundColor: "#7f7aea",
-
-  border: "0px solid #E8E8E8",
-  fontFamily: "Arial",
-  cursor: "pointer"
-};
-let SignUpStyle = {
-  position: "fixed",
-  left: 900,
-  top: 450,
-  height: "10%",
-  width: "32.5%",
-
-  textAlign: "center",
-  fontSize: "25px",
-  borderRadius: "10px",
-  borderWidth: "0.1px",
-  borderColor: "#c2c2c2",
-  color: "white",
-  backgroundColor: "#faa551",
-
-  border: "0px solid #E8E8E8",
-  fontFamily: "Arial",
-  cursor: "pointer"
-};
 const Signin = props => {
   const [info, setInfo] = useState({
     Email: "",
@@ -173,23 +76,16 @@ const Signin = props => {
   };
 
   return (
-    <div style={backStyle}>
-      <div style={layer}>
-        <div
-          style={{
-            backgroundColor: "rgb(255,255,255,0.8)",
-            backgroundSize: "auto"
-            //borderRadius: "130px",
-          }}
-        ></div>
+    <div className="MainDiv">
+      <div className="Main">
+        <img src={home1} alt="logo" />
 
-        <img src={shapee} alt="box" style={shapeStyle} />
-
-        <form>
+        <form className="formClass">
           <input
             type="text"
             name="Email"
-            style={EmailStyle}
+            // style={EmailStyle}
+            className="EmailClass"
             placeholder="Email Address"
             value={info.Email}
             onChange={InfoHandler}
@@ -197,17 +93,24 @@ const Signin = props => {
           <input
             type="password"
             name="Password"
-            style={PasswordStyle}
+            //style={PasswordStyle}
+            className="PasswordClass"
             placeholder="Password"
             value={info.Password}
             onChange={InfoHandler}
           ></input>
-          <button className="grow" style={ButtonStyle} onClick={ButtonHandler}>
+          <button
+            className="grow outline"
+            //style={ButtonStyle}
+            id="btn-1"
+            onClick={ButtonHandler}
+          >
             Log In
           </button>
           <button
-            className="grow"
-            style={SignUpStyle}
+            className="grow outline"
+            style={{ backgroundColor: "#faa551" }}
+            id="btn-2"
             onClick={handleClickOpen}
           >
             Sign Up
@@ -286,6 +189,8 @@ const Signin = props => {
           </DialogActions>
         </Dialog>
       </div>
+
+      <div className="logos">{<img src={logos1} alt="logos" />}</div>
     </div>
   );
 };
