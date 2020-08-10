@@ -16,7 +16,10 @@ function App() {
         path="/home/qr/:code/:imageUrl/:hash"
         component={QrCode}
       />
-      <ProtectedRoute path="/home/course/:code" component={CourseStatPage} />
+      <ProtectedRoute
+        path="/home/course/:name/:code"
+        component={CourseStatPage}
+      />
       <ProtectedRoute path="/home" component={HomePage} />
       <Route path="/" component={Signin} />
     </Switch>

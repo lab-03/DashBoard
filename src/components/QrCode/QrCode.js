@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import "./QrCode.css";
 import DashBoard from "../DashBoard/DashBoard";
@@ -10,7 +10,7 @@ import LogOut from "../logout/LogOut";
 
 const QrCode = props => {
   let { imageUrl, hash } = props.match.params;
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     hide: false,
     openDialog: false,
     attendees: [],
@@ -44,7 +44,10 @@ const QrCode = props => {
           })
           .on("disconnect", () => {
             console.log(`disconnected from server`);
-            setState({ ...state, listening: false });
+            setState(prevState => {
+              const attendees = [...prevState.attendees];
+              return { ...prevState, attendees, listening: false };
+            });
           });
       }
       socket.connect();
@@ -71,10 +74,10 @@ const QrCode = props => {
         socket.emit("add", { hash, newAttendee });
       })
       .on("addition succeeded", newAttendee => {
-        console.log("addition succeeded", newAttendee);
+        console.log("addition succeeded", newAttendee.attendee);
         setState(prevState => {
           const attendees = [...prevState.attendees];
-          attendees.push(newAttendee);
+          attendees.push(newAttendee.attendee);
           return { ...prevState, attendees };
         });
         console.log(`disconnecting socket ${socket.id}`);
@@ -310,6 +313,33 @@ const QrCode = props => {
                   }}
                 >
                   End Session
+                </p>
+              </Button>
+            </div>
+            <span className="ma2"></span>
+
+            <div className="center">
+              <Button
+                variant="contained"
+                className="grow shadow"
+                color="primary"
+                onClick={handleClickOpen}
+                style={{
+                  background: "#7f7aea",
+                  borderRadius: "0px",
+                  width: "60%",
+                  height: "50px",
+                  fontFamily: ["Cairo", "sans-serif"],
+                  textTransform: "none"
+                }}
+              >
+                <p
+                  className="pl2 pr2"
+                  style={{
+                    fontSize: "120%"
+                  }}
+                >
+                  Ask a Question
                 </p>
               </Button>
             </div>

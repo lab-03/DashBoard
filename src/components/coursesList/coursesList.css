@@ -1,6 +1,18 @@
-.bottomRightImage {
+/* .bottomRightImage {
   position: fixed;
   z-index: -1;
   top: 450px;
   width: 52.5%;
+} */
+
+.main {
+  min-height: calc(90vh - 70px);
+  margin-bottom: -50px;
+}
+.footer {
+  /* width: 52.5%;
+
+  margin-left: 48%;
+  margin-top: 19%; */
+  margin-left: 48%;
 }

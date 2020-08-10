@@ -13,7 +13,7 @@ Chart.plugins.register({
 });
 
 const QuestionChart = ({ question }) => {
-  const [state, setState] = useState({
+  const [state] = useState({
     labels: [question.answer_1, question.answer_2, question.answer_3],
     datasets: [
       {
