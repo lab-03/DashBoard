@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QuestionChart from "../questionChart/questionChart";
-
+import * as firebase from "firebase/app";
+import "firebase/messaging";
 import {
   Button,
   Dialog,
@@ -26,8 +27,81 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
     },
     showChart: false,
     openDialog,
-    handleClose
+    handleClose,
+    chartData: [0, 0, 0]
   });
+  const initFcm = () => {
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWxPfb1pBzZbbFfbWmA5x1kaS8TmHOb5k",
+      authDomain: "testing-26ab5.firebaseapp.com",
+      databaseURL: "https://testing-26ab5.firebaseio.com",
+      projectId: "testing-26ab5",
+      storageBucket: "testing-26ab5.appspot.com",
+      messagingSenderId: "413945079231",
+      appId: "1:413945079231:web:eb9ff457f4379002bc6d0a",
+      measurementId: "G-J70QY249DP"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+    messaging.usePublicVapidKey(
+      "BBcQVKS01-ZJAsvD1MbUHaSAUQwsoOBFQFTrJZmmeHa_GJcxriw68PVy_Eq-T-aZEBUbcYJmRqp7Q1Vp1BlhaSg"
+    );
+    messaging
+      .requestPermission()
+      .then(async function() {
+        console.log("permission granted");
+        const token = await messaging.getToken();
+        console.log(token);
+        // sendTokenToServer(token);
+        return token;
+      })
+      .catch(function(err) {
+        console.log("Unable to get permission to notify.", err);
+      });
+    messaging.onMessage(payload => console.log("Message received. ", payload));
+    navigator.serviceWorker.addEventListener("message", message => {
+      // console.log(message);
+      console.log(
+        message.data["firebase-messaging-msg-data"].notification.body
+      );
+      let answerNumber =
+        message.data["firebase-messaging-msg-data"].notification.body;
+      let { chartData } = state;
+      chartData[answerNumber - 1] += 1;
+      console.log(chartData);
+      setState({ ...state, showChart: true, chartData });
+    });
+    console.log({ messaging });
+  };
+  const sendTokenToServer = token => {
+    fetch("https://a-tracker.herokuapp.com/users/add_device_token", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "access-token": localStorage.getItem("accessToken"),
+        client: localStorage.getItem("client"),
+        uid: localStorage.getItem("uid"),
+        "token-type": localStorage.getItem("tokenType"),
+        expiry: localStorage.getItem("expiry")
+      },
+      body: JSON.stringify({
+        device_token: { token, device_type: "web" }
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw Error(response.statusText);
+        }
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   const handleSubmit = question => {
     if (
       !question.title ||
@@ -39,6 +113,7 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
       alert("Please fill all fields!");
     } else setState({ ...state, showChart: true });
   };
+
   const handleFieldChange = event => {
     let target = event.target.name; // question title, answers or correctAnswer to be changed
     let prev = state.question; // prev question object
@@ -59,7 +134,14 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
     setState({ ...state, showChart: false });
     state.handleClose();
   };
-  let { question, showChart } = state;
+
+  useEffect(() => {
+    if (!firebase.apps.length) {
+      initFcm();
+    }
+  });
+
+  let { question, showChart, chartData } = state;
   return (
     <Dialog open={openDialog} onClose={handleClose} aria-labelledby="question">
       <DialogTitle id="question">Question</DialogTitle>
@@ -149,7 +231,9 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
             </FormControl>
           </div>
         </div>
-        {showChart ? <QuestionChart question={question} /> : null}
+        {showChart ? (
+          <QuestionChart question={question} data={chartData} />
+        ) : null}
       </DialogContent>
       <DialogActions>
         <Button value="cancel" onClick={closeDialog} color="primary">

@@ -12,7 +12,8 @@ Chart.plugins.register({
   }
 });
 
-const QuestionChart = ({ question }) => {
+const QuestionChart = ({ question, data }) => {
+  console.log("re: ", data);
   const [state] = useState({
     labels: [question.answer_1, question.answer_2, question.answer_3],
     datasets: [
@@ -24,7 +25,7 @@ const QuestionChart = ({ question }) => {
       },
       {
         label: "# of wrong Votes",
-        data: [19, 15, 10],
+        data,
         backgroundColor: [
           "rgb(255, 99, 132)",
           "rgb(255, 99, 132)",

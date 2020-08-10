@@ -174,186 +174,188 @@ const QrCode = props => {
       .catch(err => console.log(err));
   };
   let { openDialog, hide, attendees } = state;
-  console.log(attendees);
   return (
     <Fragment>
-      <LogOut history={props.history} />
+      <div className="main">
+        <LogOut history={props.history} />
 
-      <div className="mt5 flex justify-around">
-        <div
-          style={{
-            width: "100%",
-            height: "100vh",
-            backgroundColor: "rgb(0,0,0,0.1)",
-            marginTop: "-65px"
-          }}
-        >
+        <div className="mt5 flex justify-around">
           <div
-            style={
-              !hide
-                ? {
-                    marginTop: "10%"
-                  }
-                : {
-                    marginTop: "5%"
-                  }
-            }
+            style={{
+              width: "100%",
+              height: "100vh",
+              backgroundColor: "rgb(0,0,0,0.1)",
+              marginTop: "-65px"
+            }}
           >
-            <DashBoard
-              attendees={attendees}
-              onAttendeeAdd={onAttendeeAdd}
-              onAttendeeUpdate={onAttendeeUpdate}
-              onAttendeeDelete={onAttendeeDelete}
-            />
+            <div
+              style={
+                !hide
+                  ? {
+                      marginTop: "10%"
+                    }
+                  : {
+                      marginTop: "5%"
+                    }
+              }
+            >
+              <DashBoard
+                attendees={attendees}
+                onAttendeeAdd={onAttendeeAdd}
+                onAttendeeUpdate={onAttendeeUpdate}
+                onAttendeeDelete={onAttendeeDelete}
+              />
+            </div>
+            {hide ? (
+              <div
+                style={{
+                  marginRight: "4.2%"
+                }}
+              >
+                <div className="center ma3 flex justify-end">
+                  <div>
+                    <Button
+                      variant="contained"
+                      className="grow shadow"
+                      color="primary"
+                      style={{
+                        background: "#faa551",
+                        borderRadius: "0px",
+                        width: "180px",
+                        height: "50px",
+                        fontFamily: ["Cairo", "sans-serif"],
+                        textTransform: "none"
+                      }}
+                      onClick={() => {
+                        let { socket } = state;
+                        console.log(`disconnecting socket ${socket.id}`);
+                        socket.disconnect();
+                        setState({ ...state, listening: -1 });
+                        return props.history.push("/home");
+                      }}
+                    >
+                      <p
+                        className="pl2 pr2"
+                        style={{
+                          fontSize: "120%"
+                        }}
+                      >
+                        Submit
+                      </p>
+                    </Button>
+                  </div>
+                  <span className="ma2"></span>
+                  <div>
+                    <Button
+                      variant="contained"
+                      className="grow shadow"
+                      color="primary"
+                      onClick={handleClickOpen}
+                      style={{
+                        background: "#7f7aea",
+                        borderRadius: "0px",
+                        width: "180px",
+                        height: "50px",
+                        fontFamily: ["Cairo", "sans-serif"],
+                        textTransform: "none"
+                      }}
+                    >
+                      <p
+                        className="pl2 pr2"
+                        style={{
+                          fontSize: "120%"
+                        }}
+                      >
+                        Ask a Question
+                      </p>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
-          {hide ? (
+          {!hide ? (
             <div
               style={{
-                marginRight: "4.2%"
+                width: "30%",
+                height: "100%"
               }}
             >
-              <div className="center ma3 flex justify-end">
-                <div>
-                  <Button
-                    variant="contained"
-                    className="grow shadow"
-                    color="primary"
+              <img
+                className="center mt5"
+                style={{
+                  width: "100%",
+                  height: "100%"
+                }}
+                id="inputimage"
+                alt="QrCode"
+                src={imageUrl}
+              />
+              <div className="center">
+                <Button
+                  variant="contained"
+                  className="grow shadow"
+                  color="primary"
+                  onClick={() => endQrCode(hash)}
+                  style={{
+                    background: "#faa551",
+                    borderRadius: "0px",
+                    width: "60%",
+                    height: "50px",
+                    fontFamily: ["Cairo", "sans-serif"],
+                    textTransform: "none"
+                  }}
+                >
+                  <p
+                    className="pl2 pr2"
                     style={{
-                      background: "#faa551",
-                      borderRadius: "0px",
-                      width: "180px",
-                      height: "50px",
-                      fontFamily: ["Cairo", "sans-serif"],
-                      textTransform: "none"
-                    }}
-                    onClick={() => {
-                      let { socket } = state;
-                      console.log(`disconnecting socket ${socket.id}`);
-                      socket.disconnect();
-                      setState({ ...state, listening: -1 });
-                      return props.history.push("/home");
+                      fontSize: "120%"
                     }}
                   >
-                    <p
-                      className="pl2 pr2"
-                      style={{
-                        fontSize: "120%"
-                      }}
-                    >
-                      Submit
-                    </p>
-                  </Button>
-                </div>
-                <span className="ma2"></span>
-                <div>
-                  <Button
-                    variant="contained"
-                    className="grow shadow"
-                    color="primary"
-                    onClick={handleClickOpen}
+                    End Session
+                  </p>
+                </Button>
+              </div>
+              <span className="ma2"></span>
+
+              <div className="center">
+                <Button
+                  variant="contained"
+                  className="grow shadow"
+                  color="primary"
+                  onClick={handleClickOpen}
+                  style={{
+                    background: "#7f7aea",
+                    borderRadius: "0px",
+                    width: "60%",
+                    height: "50px",
+                    fontFamily: ["Cairo", "sans-serif"],
+                    textTransform: "none"
+                  }}
+                >
+                  <p
+                    className="pl2 pr2"
                     style={{
-                      background: "#7f7aea",
-                      borderRadius: "0px",
-                      width: "180px",
-                      height: "50px",
-                      fontFamily: ["Cairo", "sans-serif"],
-                      textTransform: "none"
+                      fontSize: "120%"
                     }}
                   >
-                    <p
-                      className="pl2 pr2"
-                      style={{
-                        fontSize: "120%"
-                      }}
-                    >
-                      Ask a Question
-                    </p>
-                  </Button>
-                </div>
+                    Ask a Question
+                  </p>
+                </Button>
               </div>
             </div>
           ) : null}
         </div>
-        {!hide ? (
-          <div
-            style={{
-              width: "30%",
-              height: "100%"
-            }}
-          >
-            <img
-              className="center mt5"
-              style={{
-                width: "100%",
-                height: "100%"
-              }}
-              id="inputimage"
-              alt="QrCode"
-              src={imageUrl}
-            />
-            <div className="center">
-              <Button
-                variant="contained"
-                className="grow shadow"
-                color="primary"
-                onClick={() => endQrCode(hash)}
-                style={{
-                  background: "#faa551",
-                  borderRadius: "0px",
-                  width: "60%",
-                  height: "50px",
-                  fontFamily: ["Cairo", "sans-serif"],
-                  textTransform: "none"
-                }}
-              >
-                <p
-                  className="pl2 pr2"
-                  style={{
-                    fontSize: "120%"
-                  }}
-                >
-                  End Session
-                </p>
-              </Button>
-            </div>
-            <span className="ma2"></span>
 
-            <div className="center">
-              <Button
-                variant="contained"
-                className="grow shadow"
-                color="primary"
-                onClick={handleClickOpen}
-                style={{
-                  background: "#7f7aea",
-                  borderRadius: "0px",
-                  width: "60%",
-                  height: "50px",
-                  fontFamily: ["Cairo", "sans-serif"],
-                  textTransform: "none"
-                }}
-              >
-                <p
-                  className="pl2 pr2"
-                  style={{
-                    fontSize: "120%"
-                  }}
-                >
-                  Ask a Question
-                </p>
-              </Button>
-            </div>
-          </div>
-        ) : null}
+        <QuestionDialog openDialog={openDialog} handleClose={handleClose} />
       </div>
-      <div>
+      <div className="Footer">
         <img
           className="bottomLeftImage"
           alt="bottomLeftImage"
           src={bottomLeftImage}
         />
       </div>
-      <QuestionDialog openDialog={openDialog} handleClose={handleClose} />
     </Fragment>
   );
 };
