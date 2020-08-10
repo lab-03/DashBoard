@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
+    "firebase": "^7.17.2",
     "material-table": "^1.57.2",
     "material-ui": "^0.20.2",
     "react": "^16.13.1",
