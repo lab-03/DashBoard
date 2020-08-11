@@ -31,7 +31,6 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
     chartData: [0, 0, 0]
   });
   const initFcm = () => {
-    console.log(process.env);
     const firebaseConfig = {
       apiKey: process.env.REACT_APP_apiKey,
       authDomain: process.env.REACT_APP_authDomain,

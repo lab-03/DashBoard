@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { InputLabel, FormControl, MenuItem, Select } from "@material-ui/core";
 
-const SessionSelector = ({ getStat, sessions }) => {
+const SessionSelector = ({ setStats, sessions }) => {
   const [state, setState] = useState({
     selected: "1"
   });
@@ -16,7 +16,7 @@ const SessionSelector = ({ getStat, sessions }) => {
     }
   };
   const handleChange = event => {
-    getStat(event.target.value);
+    setStats(sessions, event.target.value);
     setState({ ...state, selected: event.target.value });
   };
   let { selected } = state;
@@ -42,8 +42,8 @@ const SessionSelector = ({ getStat, sessions }) => {
           MenuProps={MenuProps}
         >
           {sessions.map(session => (
-            <MenuItem key={session.id} value={session.id}>
-              {"(" + session.id + ") " + session.date}
+            <MenuItem key={session.id} value={session.id.toString()}>
+              {"(" + session.id + ") " + session.created_at}
             </MenuItem>
           ))}
         </Select>

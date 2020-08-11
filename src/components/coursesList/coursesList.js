@@ -185,7 +185,6 @@ const Courses = props => {
             <div className="ml5">
               <List>
                 {courses.map(course => {
-                  console.log({ courseName: course.name, id: course.id });
                   return (
                     <Course
                       key={course.id}
