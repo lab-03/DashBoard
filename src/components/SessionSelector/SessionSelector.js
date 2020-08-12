@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { InputLabel, FormControl, MenuItem, Select } from "@material-ui/core";
 
-const SessionSelector = ({ setStats, sessions }) => {
+const SessionSelector = ({ setStats, sessions, selected }) => {
   const [state, setState] = useState({
-    selected: "1"
+    selected
   });
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -19,7 +19,7 @@ const SessionSelector = ({ setStats, sessions }) => {
     setStats(sessions, event.target.value);
     setState({ ...state, selected: event.target.value });
   };
-  let { selected } = state;
+  // let { selected } = state;
   return (
     <div>
       <FormControl>
@@ -43,7 +43,7 @@ const SessionSelector = ({ setStats, sessions }) => {
         >
           {sessions.map(session => (
             <MenuItem key={session.id} value={session.id.toString()}>
-              {"(" + session.id + ") " + session.created_at}
+              {"(" + session.number + ") " + session.created_at}
             </MenuItem>
           ))}
         </Select>
