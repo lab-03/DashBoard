@@ -10,31 +10,40 @@ const CourseStat = props => {
   let { code, name } = props.match.params;
   const [state, setState] = useState({
     sessions: [],
+    currentSessionId: 1,
     getSessions: true,
     chartsData: [
       {
         id: "1",
-        labels: [],
-        dataSetLabel: "# of students",
+        labels: ["1", "2", "3", "4"],
+        dataSetLabel: "# of votes",
         data: [],
-        title: "Attendees per sessions",
-        chartType: "line"
+        title: "feedback Question: ",
+        chartType: "bar"
       },
       {
         id: "2",
-        labels: ["1", "2", "3"],
-        dataSetLabel: "lorem epsum",
-        data: [10, 60, 15],
-        title: "feedback Question: what asdasfa",
+        labels: ["1", "2", "3", "4"],
+        dataSetLabel: "# of votes",
+        data: [],
+        title: "feedback Question: ",
         chartType: "bar"
       },
       {
         id: "3",
-        labels: ["1", "2", "3"],
-        dataSetLabel: "lorem epsum",
-        data: [10, 100, 15],
-        title: "third",
+        labels: ["1", "2", "3", "4"],
+        dataSetLabel: "# of votes",
+        data: [],
+        title: "feedback Question: ",
         chartType: "bar"
+      },
+      {
+        id: "4",
+        labels: [],
+        dataSetLabel: "# of students",
+        data: [],
+        title: "Attendees per session",
+        chartType: "line"
       }
     ],
     currentChartId: "0",
@@ -74,6 +83,160 @@ const CourseStat = props => {
   useEffect(() => {
     let { getSessions } = state;
     if (getSessions) {
+      // let sessions = [
+      //   {
+      //     id: 1,
+      //     duration: null,
+      //     ended_at: "2020-08-08T21:42:26.940Z",
+      //     created_at: "2020-08-06T17:53:57.818Z",
+      //     updated_at: "2020-08-08T21:42:26.941Z",
+      //     apply_checks: true,
+      //     lat: null,
+      //     long: null,
+      //     qr_code_base64: null,
+      //     token: "8toQnfsT8gkjokENoHo91Ccs",
+      //     by_teacher: { name: "Macy Beahan", user_id: 1, lecturer_id: 1 },
+      //     attendance: {
+      //       total_students: 21,
+      //       attended_students: 10,
+      //       unattended_students: 21
+      //     },
+      //     interactive_quizzes: [
+      //       {
+      //         name: "hamada",
+      //         total_students: 21,
+      //         total_right_answers: 28,
+      //         total_questions: 4,
+      //         questions: [
+      //           {
+      //             text: "question #1",
+      //             choices: [
+      //               { text: "choice 1", correct: true, no_students_choosed: 7 },
+      //               {
+      //                 text: "choice 2",
+      //                 correct: false,
+      //                 no_students_choosed: 7
+      //               },
+      //               { text: "choice 3", correct: false, no_students_choosed: 7 }
+      //             ]
+      //           },
+      //           {
+      //             text: "question #2",
+      //             choices: [
+      //               {
+      //                 text: "choice 1123",
+      //                 correct: true,
+      //                 no_students_choosed: 2
+      //               },
+      //               {
+      //                 text: "choice 2123",
+      //                 correct: false,
+      //                 no_students_choosed: 72
+      //               },
+      //               {
+      //                 text: "choice 3123",
+      //                 correct: false,
+      //                 no_students_choosed: 6
+      //               }
+      //             ]
+      //           },
+      //           {
+      //             text: "question #3",
+      //             choices: [
+      //               {
+      //                 text: "choice dsa1",
+      //                 correct: true,
+      //                 no_students_choosed: 78
+      //               },
+      //               {
+      //                 text: "choice fds2",
+      //                 correct: false,
+      //                 no_students_choosed: 77
+      //               },
+      //               {
+      //                 text: "choice asd3",
+      //                 correct: false,
+      //                 no_students_choosed: 7
+      //               }
+      //             ]
+      //           },
+      //           {
+      //             text: "question #4",
+      //             choices: [
+      //               {
+      //                 text: "choice ggg",
+      //                 correct: true,
+      //                 no_students_choosed: 75
+      //               },
+      //               {
+      //                 text: "choice ggg2",
+      //                 correct: false,
+      //                 no_students_choosed: 74
+      //               },
+      //               {
+      //                 text: "choice ggg3",
+      //                 correct: false,
+      //                 no_students_choosed: 72
+      //               }
+      //             ]
+      //           }
+      //         ],
+      //         ended_at: null,
+      //         started_at: "2020-08-11T12:22:20.113Z"
+      //       }
+      //     ],
+      //     feedback: [
+      //       {
+      //         text: "3",
+      //         average_rating: 2.5,
+      //         rating_count: { "1": 5, "2": 5, "3": 5, "4": 5 },
+      //         students_submitted: 20
+      //       },
+      //       {
+      //         text: "3",
+      //         average_rating: 2.5,
+      //         rating_count: { "1": 10, "2": 5, "3": 5, "4": 5 },
+      //         students_submitted: 20
+      //       },
+      //       {
+      //         text: "2",
+      //         average_rating: 2.5,
+      //         rating_count: { "1": 5, "2": 9, "3": 5, "4": 5 },
+      //         students_submitted: 20
+      //       },
+      //       {
+      //         text: "1",
+      //         average_rating: 2.5,
+      //         rating_count: { "1": 5, "2": 5, "3": 7, "4": 5 },
+      //         students_submitted: 20
+      //       },
+      //       {
+      //         text: "3",
+      //         average_rating: 2.5,
+      //         rating_count: { "1": 5, "2": 5, "3": 5, "4": 5 },
+      //         students_submitted: 20
+      //       },
+      //       {
+      //         text: "3",
+      //         average_rating: 2.5,
+      //         rating_count: { "1": 5, "2": 5, "3": 5, "4": 5 },
+      //         students_submitted: 20
+      //       },
+      //       {
+      //         text: "2",
+      //         average_rating: 2.5,
+      //         rating_count: { "1": 5, "2": 5, "3": 5, "4": 5 },
+      //         students_submitted: 20
+      //       },
+      //       {
+      //         text: "1",
+      //         average_rating: 2.5,
+      //         rating_count: { "": 20, "1": 5, "2": 5, "3": 5, "4": 5 },
+      //         students_submitted: 40
+      //       }
+      //     ]
+      //   }
+      // ];
       fetch(`https://a-tracker.herokuapp.com/courses/${code}/report`, {
         method: "get",
         headers: {
@@ -88,27 +251,76 @@ const CourseStat = props => {
         .then(response => response.json())
         .then(response => {
           let { sessions } = response;
-          let { stats, chartsData } = state;
+          // console.log(sessions);
+          let { stats, chartsData, currentSessionId } = state;
           stats[0].value = sessions[0].attendance.attended_students;
-          // stats[1].value = sessions[0].attendance.attended_students;
-          stats[2].value = sessions[0].participants.total_students;
+          stats[1].value = sessions[0].interactive_quizzes[0].total_questions;
+          stats[2].value = sessions[0].interactive_quizzes[0].total_students;
           stats[3].value =
-            (stats[0].value * sessions[0].participants.total_students) / 100 +
+            (stats[0].value *
+              sessions[0].interactive_quizzes[0].total_students) /
+              100 +
             "%";
-          stats[4].value = sessions[0].participants.total_right_answers;
+          stats[4].value =
+            sessions[0].interactive_quizzes[0].total_right_answers;
           stats[5].value =
-            (sessions[0].participants.total_students * stats[4].value) / 100 +
+            (sessions[0].interactive_quizzes[0].total_students *
+              stats[4].value) /
+              100 +
             "%";
 
-          chartsData[0].labels = sessions.map(session => {
-            return session.created_at;
+          chartsData[3].labels = sessions.map(session => {
+            return session.id;
           });
-          chartsData[0].data = sessions.map(session => {
+          chartsData[3].data = sessions.map(session => {
             return session.attendance.attended_students;
           });
+
+          let session = sessions.filter(session => {
+            return session.id === currentSessionId;
+          });
+
+          let numberOfQuestions =
+            session[0].interactive_quizzes[0].questions.length;
+
+          for (let i = 0; i < numberOfQuestions; i++) {
+            let questionChart = {
+              id: chartsData.length,
+              labels: [
+                session[0].interactive_quizzes[0].questions[i].choices[0].text,
+                session[0].interactive_quizzes[0].questions[i].choices[1].text,
+                session[0].interactive_quizzes[0].questions[i].choices[2].text
+              ],
+              dataSetLabel: "# of votes",
+              data: [
+                session[0].interactive_quizzes[0].questions[i].choices[0]
+                  .no_students_choosed,
+                session[0].interactive_quizzes[0].questions[i].choices[1]
+                  .no_students_choosed,
+                session[0].interactive_quizzes[0].questions[i].choices[2]
+                  .no_students_choosed
+              ],
+              title: session[0].interactive_quizzes[0].questions[i].text,
+              chartType: "bar"
+            };
+            chartsData.push(questionChart);
+          }
+
+          for (let i = 0; i < 3; i++) {
+            let temp = [
+              session[0].feedback[i].rating_count["1"],
+              session[0].feedback[i].rating_count["2"],
+              session[0].feedback[i].rating_count["3"],
+              session[0].feedback[i].rating_count["4"]
+            ];
+            chartsData[i].data = temp;
+          }
+
+          console.log(sessions);
           setState({
             ...state,
             sessions: sessions,
+            chartsData,
             stats,
             getSessions: false
           });
@@ -124,20 +336,21 @@ const CourseStat = props => {
     });
     console.log(id, session[0]);
     stats[0].value = session[0].attendance.attended_students;
-    // stats[1].value = session[0].attendance.attended_students;
-    stats[2].value = session[0].participants.total_students;
+    stats[1].value = sessions[0].interactive_quizzes.total_questions;
+    stats[2].value = session[0].interactive_quizzes.total_students;
     stats[3].value =
-      (stats[0].value * session[0].participants.total_students) / 100;
-    stats[4].value = session[0].participants.total_right_answers;
+      (stats[0].value * session[0].interactive_quizzes.total_students) / 100;
+    stats[4].value = session[0].interactive_quizzes.total_right_answers;
     stats[5].value =
-      (session[0].participants.total_students * stats[4].value) / 100;
+      (session[0].interactive_quizzes.total_students * stats[4].value) / 100;
     stats[0].value = session[0].attendance.attended_students;
 
     console.log(stats);
 
     setState({
       ...state,
-      stats
+      stats,
+      currentSessionId: session.id
     });
   };
 
@@ -154,11 +367,11 @@ const CourseStat = props => {
   };
 
   let { sessions, chartsData, currentChartId, stats } = state;
-  console.log(chartsData[currentChartId]);
+  console.log(sessions);
   return (
     <div
       style={{
-        backgroundColor: "rgb(0,0,0,0.1)"
+        backgroundColor: "rgb(0,0,0,0.01)"
       }}
     >
       <span
@@ -205,7 +418,7 @@ const CourseStat = props => {
       <div
         className="vh-50-ns w-100"
         style={{
-          backgroundColor: "rgb(0,0,0,0.1)"
+          backgroundColor: "rgb(0,0,0,0.03)"
         }}
       >
         <div className="flex justify-around center">
@@ -222,7 +435,12 @@ const CourseStat = props => {
               outline: "none"
             }}
           ></button>
-          <div className=" w-40">
+          <div
+            className="mt3 w-40"
+            style={{
+              backgroundColor: "rgb(255,255,255)"
+            }}
+          >
             <StatChart
               chartData={chartsData[currentChartId]}
               type={chartsData[currentChartId].chartType}
