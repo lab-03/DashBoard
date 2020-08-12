@@ -89,7 +89,7 @@ const CourseStat = props => {
         chartType: "line"
       }
     ],
-    currentChartId: 0,
+    currentChartIndx: 1,
     currentChart: {
       id: "0",
       labels: ["1", "2", "3", "4"],
@@ -284,7 +284,7 @@ const CourseStat = props => {
       sessions[count - 1].number = count;
       return count++;
     });
-    if (session.feedback.length !== 0) {
+    if (session[0].feedback.length !== 0) {
       for (let i = 0; i < 2; i++) {
         let temp = [
           session[0].feedback[i].rating_count["1"],
@@ -305,24 +305,24 @@ const CourseStat = props => {
   };
 
   const handleClickNext = () => {
-    let next = (state.currentChartId + 1) % state.chartsData.length;
+    let next = (state.currentChartIndx + 1) % state.chartsData.length;
     console.log(next, state.chartsData[next], chartsData);
     setState({
       ...state,
-      currentChartId: next,
+      currentChartIndx: next,
       currentChart: chartsData[next]
     });
   };
 
   const handleClickPrev = () => {
     let prev =
-      (state.currentChartId - 1 + state.chartsData.length) %
+      (state.currentChartIndx - 1 + state.chartsData.length) %
       state.chartsData.length;
 
     console.log(prev, state.chartsData[prev], chartsData);
     setState({
       ...state,
-      currentChartId: prev,
+      currentChartIndx: prev,
       currentChart: chartsData[prev]
     });
   };
@@ -330,7 +330,7 @@ const CourseStat = props => {
   let {
     sessions,
     chartsData,
-    currentChartId,
+    currentChartIndx,
     stats,
     currentSessionId,
     currentChart
