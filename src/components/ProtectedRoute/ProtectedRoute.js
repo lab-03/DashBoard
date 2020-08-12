@@ -6,9 +6,9 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) => {
+      render={props => {
         if (auth.isAuthenticated()) {
-          console.log("theere", auth.isAuthenticated());
+          // console.log("theere", auth.isAuthenticated());
           return <Component {...props} />;
         } else {
           return (
@@ -16,8 +16,8 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
               to={{
                 pathname: "/",
                 state: {
-                  from: props.location,
-                },
+                  from: props.location
+                }
               }}
             />
           );

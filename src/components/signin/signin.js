@@ -44,14 +44,15 @@ const Signin = props => {
   };
   const ButtonHandler = e => {
     if (!info.Email || !info.Password) alert("Please enter email and password");
-    e.preventDefault();
-
-    auth.login(info.Email, info.Password, res => {
-      if (res) {
-        props.history.push("/home");
-        toast.success(`Welcome ${localStorage.getItem("firstName")} ! `);
-      } else alert("invalid email or password");
-    });
+    else {
+      e.preventDefault();
+      auth.login(info.Email, info.Password, res => {
+        if (res) {
+          props.history.push("/home");
+          toast.success(`Welcome ${localStorage.getItem("firstName")} ! `);
+        } else alert("invalid email or password");
+      });
+    }
   };
   const SignUpButtonHandler = () => {
     if (!info.FirstName || !info.LastName || !info.EmailS || !info.PasswordS)
