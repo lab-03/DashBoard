@@ -1,7 +1,7 @@
 var axios = require("axios");
 class SignUp {
   SignUp = async (firstName, lastName, E, P, cb) => {
-    console.log("first", firstName, "last", lastName, "em", E, "ps", P);
+    // console.log("first", firstName, "last", lastName, "em", E, "ps", P);
     var obj = {
       first_name: firstName,
       last_name: lastName,

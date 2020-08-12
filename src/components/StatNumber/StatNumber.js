@@ -7,7 +7,7 @@ const StatNumber = ({ stat }) => {
         style={{
           fontFamily: ["Cairo", "sans-serif"],
           color: "#faa551",
-          fontSize: "120%"
+          fontSize: "90%"
         }}
       >
         {stat.title}
@@ -16,7 +16,7 @@ const StatNumber = ({ stat }) => {
         style={{
           fontFamily: ["Alfa Slab One", "cursive"],
           color: "#7f7aea",
-          fontSize: "200%",
+          fontSize: "50px",
           marginLeft: "2%"
         }}
       >

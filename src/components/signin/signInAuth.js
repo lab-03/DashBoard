@@ -19,12 +19,12 @@ class SignInAuth {
         localStorage.setItem("firstName", response.data.data.first_name);
         localStorage.setItem("expiry", response.headers["expiry"]);
         localStorage.setItem("tokenType", response.headers["token-type"]);
-        console.log("here", localStorage);
+        // console.log("here", localStorage);
       })
 
       .catch(error => {
         if (error.response.status === 401) {
-          console.log("hi");
+          // console.log("hi");
           localStorage.removeItem("accessToken");
         }
       });

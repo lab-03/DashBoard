@@ -8,13 +8,13 @@ import {
   Divider
 } from "@material-ui/core";
 
-const Course = ({ id, name, createQrCode }) => {
+const Course = ({ id, name, createQrCode, code }) => {
   return (
     <Fragment>
       <ListItem>
         <ListItemText
           primary={name}
-          secondary={id}
+          secondary={code}
           style={{
             color: "#7f7aea",
             fontSize: "80%",

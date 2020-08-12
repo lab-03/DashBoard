@@ -345,7 +345,7 @@ const CourseStat = props => {
       <span
         className="center"
         style={{
-          color: "#faa551",
+          color: "#7f7aea",
           fontSize: "150%",
           bold: true,
           fontFamily: ["Cairo", "sans-serif"]
