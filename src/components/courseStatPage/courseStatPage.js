@@ -89,9 +89,9 @@ const CourseStat = props => {
         chartType: "line"
       }
     ],
-    currentChartIndx: 0,
+    currentChartIndx: 1,
     currentChart: {
-      id: "0",
+      id: "1",
       labels: ["1", "2", "3", "4"],
       dataSetLabel: "# of votes",
       data: [],
