@@ -91,7 +91,7 @@ const Courses = props => {
           session: {
             classable_id: id,
             classable_type: "Course",
-            applyChecks: !checked,
+            apply_checks: !checked,
             long: longitude,
             lat: latitude
           }
