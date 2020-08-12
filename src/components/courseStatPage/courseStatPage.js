@@ -95,7 +95,8 @@ const CourseStat = props => {
       labels: ["1", "2", "3", "4"],
       dataSetLabel: "# of votes",
       data: [],
-      title: "feedback Question: Did you fully understand the topic of this lecture?",
+      title:
+        "feedback Question: Did you fully understand the topic of this lecture?",
       chartType: "bar"
     },
     stats: [
@@ -220,7 +221,7 @@ const CourseStat = props => {
             ...state,
             sessions,
             chartsData,
-            currentChart: chartsData[0],
+            currentChart: chartsData[1],
             stats,
             currentSessionId: session.id,
             getSessions: false
