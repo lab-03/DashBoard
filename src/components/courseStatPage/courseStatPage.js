@@ -91,11 +91,11 @@ const CourseStat = props => {
     ],
     currentChartIndx: 1,
     currentChart: {
-      id: "0",
+      id: "1",
       labels: ["1", "2", "3", "4"],
       dataSetLabel: "# of votes",
       data: [],
-      title: "feedback Question: was this lecture/lab/section helpful?",
+      title: "feedback Question: Did you fully understand the topic of this lecture?",
       chartType: "bar"
     },
     stats: [
