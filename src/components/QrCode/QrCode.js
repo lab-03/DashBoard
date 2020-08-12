@@ -347,7 +347,11 @@ const QrCode = props => {
           ) : null}
         </div>
 
-        <QuestionDialog openDialog={openDialog} handleClose={handleClose} />
+        <QuestionDialog
+          openDialog={openDialog}
+          handleClose={handleClose}
+          hash={hash}
+        />
       </div>
       <div className="Footer">
         <img

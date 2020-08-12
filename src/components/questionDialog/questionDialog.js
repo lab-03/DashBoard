@@ -16,7 +16,7 @@ import {
   TextField
 } from "@material-ui/core";
 
-const QuestionDialog = ({ handleClose, openDialog }) => {
+const QuestionDialog = ({ handleClose, openDialog, hash }) => {
   const [state, setState] = useState({
     question: {
       title: "",
@@ -109,7 +109,63 @@ const QuestionDialog = ({ handleClose, openDialog }) => {
       !question.correctAnswer
     ) {
       alert("Please fill all fields!");
-    } else setState({ ...state, showChart: true });
+    } else {
+      fetch(
+        `https://a-tracker.herokuapp.com/sessions/${hash}/interactive_quiz`,
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "access-token": localStorage.getItem("accessToken"),
+            client: localStorage.getItem("client"),
+            uid: localStorage.getItem("uid"),
+            "token-type": localStorage.getItem("tokenType"),
+            expiry: localStorage.getItem("expiry")
+          },
+          body: JSON.stringify({
+            interactive_quiz: {
+              name: "question",
+              questions_attributes: [
+                {
+                  text: question.title,
+                  choices_attributes: [
+                    {
+                      text: question.answer_1,
+                      correct: question.correctAnswer === 1 ? true : false,
+                      choice_num: "1"
+                    },
+                    {
+                      text: question.answer_2,
+                      correct: question.correctAnswer === 2 ? true : false,
+                      choice_num: "2"
+                    },
+                    {
+                      text: question.answer_3,
+                      correct: question.correctAnswer === 3 ? true : false,
+                      choice_num: "3"
+                    }
+                  ]
+                }
+              ]
+            }
+          })
+        }
+      )
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw Error(response.statusText);
+          }
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      setState({ ...state, showChart: true });
+    }
   };
 
   const handleFieldChange = event => {
