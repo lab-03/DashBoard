@@ -13,7 +13,7 @@ import {
   Radio,
   FormControlLabel,
   DialogTitle,
-  TextField
+  TextField,
 } from "@material-ui/core";
 
 const QuestionDialog = ({ handleClose, openDialog, hash }) => {
@@ -23,12 +23,12 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
       answer_1: "",
       answer_2: "",
       answer_3: "",
-      correctAnswer: null
+      correctAnswer: null,
     },
     showChart: false,
     openDialog,
     handleClose,
-    chartData: [0, 0, 0]
+    chartData: [0, 0, 0],
   });
   const initFcm = () => {
     const firebaseConfig = {
@@ -39,39 +39,41 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
       storageBucket: process.env.REACT_APP_storageBucket,
       messagingSenderId: process.env.REACT_APP_messagingSenderId,
       appId: process.env.REACT_APP_appId,
-      measurementId: process.env.REACT_APP_measurementId
+      measurementId: process.env.REACT_APP_measurementId,
     };
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
     messaging.usePublicVapidKey(process.env.REACT_APP_apiPubKey);
     messaging
       .requestPermission()
-      .then(async function() {
+      .then(async function () {
         console.log("permission granted");
         const token = await messaging.getToken();
         console.log(token);
         sendTokenToServer(token);
         return token;
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.log("Unable to get permission to notify.", err);
       });
-    messaging.onMessage(payload => console.log("Message received. ", payload));
-    navigator.serviceWorker.addEventListener("message", message => {
+    messaging.onMessage((payload) =>
+      console.log("Message received. ", payload)
+    );
+    navigator.serviceWorker.addEventListener("message", (message) => {
       // console.log(message);
       // console.log(
-      //   message.data["firebase-messaging-msg-data"].notification.body
+      //   message.data["firebase-messaging-msg-data"].data.choice_num
       // );
       let answerNumber =
-        message.data["firebase-messaging-msg-data"].notification.body;
+        message.data["firebase-messaging-msg-data"].data.choice_num;
       let { chartData } = state;
       chartData[answerNumber - 1] += 1;
-      console.log(chartData);
+      console.log(message, chartData);
       setState({ ...state, showChart: true, chartData });
     });
     console.log({ messaging });
   };
-  const sendTokenToServer = token => {
+  const sendTokenToServer = (token) => {
     fetch("https://a-tracker.herokuapp.com/users/add_device_token", {
       method: "post",
       headers: {
@@ -80,27 +82,27 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
         client: localStorage.getItem("client"),
         uid: localStorage.getItem("uid"),
         "token-type": localStorage.getItem("tokenType"),
-        expiry: localStorage.getItem("expiry")
+        expiry: localStorage.getItem("expiry"),
       },
       body: JSON.stringify({
-        device_token: { token, device_type: "web" }
-      })
+        device_token: { token, device_type: "web" },
+      }),
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           return response.json();
         } else {
           throw Error(response.statusText);
         }
       })
-      .then(response => {
+      .then((response) => {
         console.log(response);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
-  const handleSubmit = question => {
+  const handleSubmit = (question) => {
     if (
       !question.title ||
       !question.answer_1 ||
@@ -120,7 +122,7 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
             client: localStorage.getItem("client"),
             uid: localStorage.getItem("uid"),
             "token-type": localStorage.getItem("tokenType"),
-            expiry: localStorage.getItem("expiry")
+            expiry: localStorage.getItem("expiry"),
           },
           body: JSON.stringify({
             interactive_quiz: {
@@ -132,49 +134,49 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
                     {
                       text: question.answer_1,
                       correct: question.correctAnswer === 1 ? true : false,
-                      choice_num: "1"
+                      choice_num: "1",
                     },
                     {
                       text: question.answer_2,
                       correct: question.correctAnswer === 2 ? true : false,
-                      choice_num: "2"
+                      choice_num: "2",
                     },
                     {
                       text: question.answer_3,
                       correct: question.correctAnswer === 3 ? true : false,
-                      choice_num: "3"
-                    }
-                  ]
-                }
-              ]
-            }
-          })
+                      choice_num: "3",
+                    },
+                  ],
+                },
+              ],
+            },
+          }),
         }
       )
-        .then(response => {
+        .then((response) => {
           if (response.ok) {
             return response.json();
           } else {
             throw Error(response.statusText);
           }
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
       setState({ ...state, showChart: true });
     }
   };
 
-  const handleFieldChange = event => {
+  const handleFieldChange = (event) => {
     let target = event.target.name; // question title, answers or correctAnswer to be changed
     let prev = state.question; // prev question object
     prev[target] = event.target.value; // update the title or the code depending on which has been updated
     setState({ ...state, question: prev });
   };
-  const closeDialog = event => {
+  const closeDialog = (event) => {
     setState({
       ...state,
       question: {
@@ -182,8 +184,8 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
         answer_1: "",
         answer_2: "",
         answer_3: "",
-        correctAnswer: null
-      }
+        correctAnswer: null,
+      },
     });
     setState({ ...state, showChart: false });
     state.handleClose();
@@ -213,7 +215,7 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
               required
               fullWidth
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               onChange={handleFieldChange}
             />
@@ -226,7 +228,7 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
               value={question.answer_1}
               fullWidth
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               required
               onChange={handleFieldChange}
@@ -240,7 +242,7 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
               value={question.answer_2}
               fullWidth
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               required
               onChange={handleFieldChange}
@@ -254,7 +256,7 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
               value={question.answer_3}
               fullWidth
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               required
               onChange={handleFieldChange}
