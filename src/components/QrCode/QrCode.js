@@ -8,16 +8,16 @@ import io from "socket.io-client";
 import bottomLeftImage from "./bottomLeft.png";
 import LogOut from "../logout/LogOut";
 
-const QrCode = props => {
+const QrCode = (props) => {
   let { imageUrl, hash } = props.match.params;
   const [state, setState] = useState({
     hide: false,
     openDialog: false,
     attendees: [],
     socket: io("https://gp-verifier.herokuapp.com", {
-      autoConnect: false
+      autoConnect: false,
     }),
-    listening: false
+    listening: false,
   });
 
   useEffect(() => {
@@ -31,12 +31,12 @@ const QrCode = props => {
             console.log("Socket Connected", socket.id);
             socket.emit("hash", { hash });
           })
-          .on("attendees", attendees => {
+          .on("attendees", (attendees) => {
             setState({ ...state, attendees });
           })
-          .on(hash, attendee => {
+          .on(hash, (attendee) => {
             console.log({ socketId: socket.id, hash, attendee });
-            setState(prevState => {
+            setState((prevState) => {
               const attendees = [...prevState.attendees];
               attendees.push(attendee);
               return { ...prevState, attendees };
@@ -44,7 +44,7 @@ const QrCode = props => {
           })
           .on("disconnect", () => {
             console.log(`disconnected from server`);
-            setState(prevState => {
+            setState((prevState) => {
               const attendees = [...prevState.attendees];
               return { ...prevState, attendees, listening: false };
             });
@@ -58,13 +58,13 @@ const QrCode = props => {
     setState({ ...state, openDialog: true });
   };
   const handleClose = () => {
-    setState(prevState => {
+    setState((prevState) => {
       const attendees = [...prevState.attendees];
       return { ...prevState, attendees, openDialog: false };
     });
   };
 
-  const onAttendeeAdd = newAttendee => {
+  const onAttendeeAdd = (newAttendee) => {
     if (!newAttendee.name || !newAttendee.id)
       return alert("a name and an id must be provided");
     let socket = io.connect("https://gp-verifier.herokuapp.com");
@@ -73,9 +73,9 @@ const QrCode = props => {
         console.log("Socket Connected", socket.id);
         socket.emit("add", { hash, newAttendee });
       })
-      .on("addition succeeded", newAttendee => {
+      .on("addition succeeded", (newAttendee) => {
         console.log("addition succeeded", newAttendee.attendee);
-        setState(prevState => {
+        setState((prevState) => {
           const attendees = [...prevState.attendees];
           attendees.push(newAttendee.attendee);
           return { ...prevState, attendees };
@@ -93,6 +93,36 @@ const QrCode = props => {
       .on("disconnect", () => {
         console.log("socket disconnected");
       });
+    fetch(
+      `https://a-tracker.herokuapp.com/sessions/${hash}/add_to_attendance`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "access-token": localStorage.getItem("accessToken"),
+          client: localStorage.getItem("client"),
+          uid: localStorage.getItem("uid"),
+          "token-type": localStorage.getItem("tokenType"),
+          expiry: localStorage.getItem("expiry"),
+        },
+        body: JSON.stringify({
+          student_id: newAttendee.id,
+        }),
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw Error(response.statusText);
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const onAttendeeUpdate = (updatedAttendee, id) => {
@@ -109,7 +139,7 @@ const QrCode = props => {
       .emit("update", { oldAttendee, updatedAttendee })
       .on("updated", () => {
         console.log(`${{ oldAttendee }} updated to ${{ updatedAttendee }}`);
-        setState(prevState => {
+        setState((prevState) => {
           const attendees = [...prevState.attendees];
           console.log(attendees);
           attendees[id] = updatedAttendee;
@@ -127,7 +157,7 @@ const QrCode = props => {
       });
   };
 
-  const onAttendeeDelete = attendee => {
+  const onAttendeeDelete = (attendee) => {
     let attendeeTemp = JSON.parse(JSON.stringify(attendee));
     delete attendeeTemp.tableData;
     let socket = io.connect("https://gp-verifier.herokuapp.com");
@@ -138,7 +168,7 @@ const QrCode = props => {
       .emit("delete", { attendeeTemp })
       .on("deleted", () => {
         console.log(attendeeTemp, "deleted");
-        setState(prevState => {
+        setState((prevState) => {
           const attendees = [...prevState.attendees];
           attendees.splice(attendees.indexOf(attendee), 1);
           return { ...prevState, attendees };
@@ -153,10 +183,40 @@ const QrCode = props => {
       .on("disconnect", () => {
         console.log("socket disconnected");
       });
+    fetch(
+      `https://a-tracker.herokuapp.com/sessions/${hash}/invalidate_attendance`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "access-token": localStorage.getItem("accessToken"),
+          client: localStorage.getItem("client"),
+          uid: localStorage.getItem("uid"),
+          "token-type": localStorage.getItem("tokenType"),
+          expiry: localStorage.getItem("expiry"),
+        },
+        body: JSON.stringify({
+          student_id: attendee.id,
+        }),
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw Error(response.statusText);
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const endQrCode = hash => {
-    setState(prevState => {
+  const endQrCode = (hash) => {
+    setState((prevState) => {
       const attendees = [...prevState.attendees];
       return { ...prevState, attendees, hide: true };
     });
@@ -164,14 +224,14 @@ const QrCode = props => {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        hash
-      })
+        hash,
+      }),
     })
-      .then(response => response.json())
-      .then(response => {
+      .then((response) => response.json())
+      .then((response) => {
         console.log(response);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
   let { openDialog, hide, attendees } = state;
   return (
@@ -185,17 +245,17 @@ const QrCode = props => {
               width: "100%",
               height: "100vh",
               backgroundColor: "rgb(0,0,0,0.1)",
-              marginTop: "-65px"
+              marginTop: "-65px",
             }}
           >
             <div
               style={
                 !hide
                   ? {
-                      marginTop: "10%"
+                      marginTop: "10%",
                     }
                   : {
-                      marginTop: "5%"
+                      marginTop: "5%",
                     }
               }
             >
@@ -209,7 +269,7 @@ const QrCode = props => {
             {hide ? (
               <div
                 style={{
-                  marginRight: "4.2%"
+                  marginRight: "4.2%",
                 }}
               >
                 <div className="center ma3 flex justify-end">
@@ -224,7 +284,7 @@ const QrCode = props => {
                         width: "180px",
                         height: "50px",
                         fontFamily: ["Cairo", "sans-serif"],
-                        textTransform: "none"
+                        textTransform: "none",
                       }}
                       onClick={() => {
                         let { socket } = state;
@@ -237,7 +297,7 @@ const QrCode = props => {
                       <p
                         className="pl2 pr2"
                         style={{
-                          fontSize: "120%"
+                          fontSize: "120%",
                         }}
                       >
                         Submit
@@ -257,13 +317,13 @@ const QrCode = props => {
                         width: "180px",
                         height: "50px",
                         fontFamily: ["Cairo", "sans-serif"],
-                        textTransform: "none"
+                        textTransform: "none",
                       }}
                     >
                       <p
                         className="pl2 pr2"
                         style={{
-                          fontSize: "120%"
+                          fontSize: "120%",
                         }}
                       >
                         Ask a Question
@@ -278,14 +338,14 @@ const QrCode = props => {
             <div
               style={{
                 width: "30%",
-                height: "100%"
+                height: "100%",
               }}
             >
               <img
                 className="center mt5"
                 style={{
                   width: "100%",
-                  height: "100%"
+                  height: "100%",
                 }}
                 id="inputimage"
                 alt="QrCode"
@@ -303,13 +363,13 @@ const QrCode = props => {
                     width: "60%",
                     height: "50px",
                     fontFamily: ["Cairo", "sans-serif"],
-                    textTransform: "none"
+                    textTransform: "none",
                   }}
                 >
                   <p
                     className="pl2 pr2"
                     style={{
-                      fontSize: "120%"
+                      fontSize: "120%",
                     }}
                   >
                     End Session
@@ -330,13 +390,13 @@ const QrCode = props => {
                     width: "60%",
                     height: "50px",
                     fontFamily: ["Cairo", "sans-serif"],
-                    textTransform: "none"
+                    textTransform: "none",
                   }}
                 >
                   <p
                     className="pl2 pr2"
                     style={{
-                      fontSize: "120%"
+                      fontSize: "120%",
                     }}
                   >
                     Ask a Question
