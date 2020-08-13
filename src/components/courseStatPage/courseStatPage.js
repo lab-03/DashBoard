@@ -6,7 +6,7 @@ import StatNumber from "../StatNumber/StatNumber";
 import "./courseStatPage.css";
 // import topLeftImage from "./topLeft.png";
 
-const CourseStat = props => {
+const CourseStat = (props) => {
   let { code, name } = props.match.params;
   const [state, setState] = useState({
     sessions: [
@@ -17,7 +17,7 @@ const CourseStat = props => {
         attendance: {
           total_students: "NR",
           attended_students: "NR",
-          unattended_students: "NR"
+          unattended_students: "NR",
         },
         interactive_quizzes: [
           {
@@ -33,32 +33,32 @@ const CourseStat = props => {
                   {
                     text: "choice 2",
                     correct: false,
-                    no_students_choosed: 0
+                    no_students_choosed: 0,
                   },
-                  { text: "choice 3", correct: false, no_students_choosed: 0 }
-                ]
-              }
+                  { text: "choice 3", correct: false, no_students_choosed: 0 },
+                ],
+              },
             ],
             ended_at: null,
-            started_at: "2020-08-11T12:22:20.113Z"
-          }
+            started_at: "2020-08-11T12:22:20.113Z",
+          },
         ],
         feedback: [
           {
             text: "feedback Question: was this lecture/lab/section helpful?",
             average_rating: 2.5,
             rating_count: { "1": "0", "2": "0", "3": "0", "4": "0" },
-            students_submitted: 0
+            students_submitted: 0,
           },
           {
             text:
               "feedback Question: Did you fully understand the topic of this lecture?",
             average_rating: 2.5,
             rating_count: { "1": "0", "2": "0", "3": "0", "4": "0" },
-            students_submitted: 0
-          }
-        ]
-      }
+            students_submitted: 0,
+          },
+        ],
+      },
     ],
     currentSessionId: 1,
     getSessions: true,
@@ -69,7 +69,7 @@ const CourseStat = props => {
         dataSetLabel: "# of votes",
         data: [],
         title: "feedback Question: was this lecture/lab/section helpful?",
-        chartType: "bar"
+        chartType: "bar",
       },
       {
         id: "1",
@@ -78,7 +78,7 @@ const CourseStat = props => {
         data: [],
         title:
           "feedback Question: Did you fully understand the topic of this lecture?",
-        chartType: "bar"
+        chartType: "bar",
       },
       {
         id: "2",
@@ -86,8 +86,8 @@ const CourseStat = props => {
         dataSetLabel: "# of students",
         data: [],
         title: "Attendees per session",
-        chartType: "line"
-      }
+        chartType: "line",
+      },
     ],
     currentChartIndx: 1,
     currentChart: {
@@ -97,40 +97,40 @@ const CourseStat = props => {
       data: [],
       title:
         "feedback Question: Did you fully understand the topic of this lecture?",
-      chartType: "bar"
+      chartType: "bar",
     },
     stats: [
       {
         id: "1",
         title: "Number of attendees",
-        value: ""
+        value: "",
       },
       {
         id: "2",
         title: "Number of questions",
-        value: ""
+        value: "",
       },
       {
         id: "3",
         title: "Number of participants",
-        value: ""
+        value: "",
       },
       {
         id: "4",
         title: "% of participated students",
-        value: ""
+        value: "",
       },
       {
         id: "5",
         title: "Number of correct answers",
-        value: ""
+        value: "",
       },
       {
         id: "6",
         title: "% of correct answers",
-        value: ""
-      }
-    ]
+        value: "",
+      },
+    ],
   });
   useEffect(() => {
     let { getSessions } = state;
@@ -145,17 +145,17 @@ const CourseStat = props => {
           client: localStorage.getItem("client"),
           uid: localStorage.getItem("uid"),
           "token-type": localStorage.getItem("tokenType"),
-          expiry: localStorage.getItem("expiry")
-        }
+          expiry: localStorage.getItem("expiry"),
+        },
       })
-        .then(response => response.json())
-        .then(response => {
+        .then((response) => response.json())
+        .then((response) => {
           let { sessions } = response;
           let session = sessions[0];
 
           stats[0].value = sessions[0].attendance.attended_students;
+          stats[1].value = sessions[0].interactive_quizzes.length;
           if (sessions[0].interactive_quizzes.length !== 0) {
-            stats[1].value = sessions[0].interactive_quizzes[0].total_questions;
             stats[2].value = sessions[0].interactive_quizzes[0].total_students;
             stats[3].value =
               (stats[0].value *
@@ -179,7 +179,7 @@ const CourseStat = props => {
                 labels: [
                   session.interactive_quizzes[i].questions[0].choices[0].text,
                   session.interactive_quizzes[i].questions[0].choices[1].text,
-                  session.interactive_quizzes[i].questions[0].choices[2].text
+                  session.interactive_quizzes[i].questions[0].choices[2].text,
                 ],
                 dataSetLabel: "# of votes",
                 data: [
@@ -188,20 +188,27 @@ const CourseStat = props => {
                   session.interactive_quizzes[i].questions[0].choices[1]
                     .no_students_choosed,
                   session.interactive_quizzes[i].questions[0].choices[2]
-                    .no_students_choosed
+                    .no_students_choosed,
                 ],
                 title: session.interactive_quizzes[i].questions[0].text,
-                chartType: "bar"
+                chartType: "bar",
               };
+              console.log(questionChart);
+
               chartsData.push(questionChart);
             }
+          } else {
+            stats[2].value = 0;
+            stats[3].value = 0;
+            stats[4].value = 0;
+            stats[5].value = 0;
           }
-          chartsData[2].data = sessions.map(session => {
+          chartsData[2].data = sessions.map((session) => {
             return session.attendance.attended_students;
           });
 
           let count = 1;
-          chartsData[2].labels = sessions.map(session => {
+          chartsData[2].labels = sessions.map((session) => {
             sessions[count - 1].number = count;
             return count++;
           });
@@ -212,7 +219,7 @@ const CourseStat = props => {
                 session.feedback[i].rating_count["1"],
                 session.feedback[i].rating_count["2"],
                 session.feedback[i].rating_count["3"],
-                session.feedback[i].rating_count["4"]
+                session.feedback[i].rating_count["4"],
               ];
               chartsData[i].data = temp;
             }
@@ -224,23 +231,23 @@ const CourseStat = props => {
             currentChart: chartsData[1],
             stats,
             currentSessionId: session.id,
-            getSessions: false
+            getSessions: false,
           });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   }, [state, code]);
 
   const setStats = (sessions, id) => {
     let { stats, chartsData } = state;
-    let session = sessions.filter(session => {
+    let session = sessions.filter((session) => {
       return session.id.toString() === id;
     });
     console.log(id, session[0]);
     stats[0].value = session[0].attendance.attended_students;
+    stats[1].value = session[0].interactive_quizzes.length;
 
-    if (sessions[0].interactive_quizzes.length !== 0) {
-      stats[1].value = sessions[0].interactive_quizzes[0].total_questions;
+    if (session[0].interactive_quizzes.length !== 0) {
       stats[2].value = session[0].interactive_quizzes[0].total_students;
       if (stats[0].value !== "NR")
         stats[3].value =
@@ -259,7 +266,7 @@ const CourseStat = props => {
           labels: [
             session[0].interactive_quizzes[i].questions[0].choices[0].text,
             session[0].interactive_quizzes[i].questions[0].choices[1].text,
-            session[0].interactive_quizzes[i].questions[0].choices[2].text
+            session[0].interactive_quizzes[i].questions[0].choices[2].text,
           ],
           dataSetLabel: "# of votes",
           data: [
@@ -268,20 +275,28 @@ const CourseStat = props => {
             session[0].interactive_quizzes[i].questions[0].choices[1]
               .no_students_choosed,
             session[0].interactive_quizzes[i].questions[0].choices[2]
-              .no_students_choosed
+              .no_students_choosed,
           ],
           title: session[0].interactive_quizzes[i].questions[0].text,
-          chartType: "bar"
+          chartType: "bar",
         };
+        console.log(questionChart);
         chartsData.push(questionChart);
       }
+    } else {
+      stats[2].value = 0;
+      stats[3].value = 0;
+      stats[4].value = 0;
+      stats[5].value = 0;
     }
-    chartsData[2].data = sessions.map(session => {
+    console.log(chartsData);
+
+    chartsData[2].data = sessions.map((session) => {
       return session.attendance.attended_students;
     });
 
     let count = 1;
-    chartsData[2].labels = sessions.map(session => {
+    chartsData[2].labels = sessions.map((session) => {
       sessions[count - 1].number = count;
       return count++;
     });
@@ -291,17 +306,19 @@ const CourseStat = props => {
           session[0].feedback[i].rating_count["1"],
           session[0].feedback[i].rating_count["2"],
           session[0].feedback[i].rating_count["3"],
-          session[0].feedback[i].rating_count["4"]
+          session[0].feedback[i].rating_count["4"],
         ];
         chartsData[i].data = temp;
       }
     }
     console.log(stats);
+    let chart = chartsData[1];
     setState({
       ...state,
       stats,
       chartsData,
-      currentSessionId: session[0].id
+      currentChart: chart,
+      currentSessionId: session[0].id,
     });
   };
 
@@ -311,7 +328,7 @@ const CourseStat = props => {
     setState({
       ...state,
       currentChartIndx: next,
-      currentChart: chartsData[next]
+      currentChart: chartsData[next],
     });
   };
 
@@ -324,7 +341,7 @@ const CourseStat = props => {
     setState({
       ...state,
       currentChartIndx: prev,
-      currentChart: chartsData[prev]
+      currentChart: chartsData[prev],
     });
   };
 
@@ -334,13 +351,13 @@ const CourseStat = props => {
     currentChartIndx,
     stats,
     currentSessionId,
-    currentChart
+    currentChart,
   } = state;
-  console.log({ currentChart });
+  console.log(sessions);
   return (
     <div
       style={{
-        backgroundColor: "rgb(0,0,0,0.01)"
+        backgroundColor: "rgb(0,0,0,0.01)",
       }}
     >
       <span
@@ -349,7 +366,7 @@ const CourseStat = props => {
           color: "#7f7aea",
           fontSize: "150%",
           bold: true,
-          fontFamily: ["Cairo", "sans-serif"]
+          fontFamily: ["Cairo", "sans-serif"],
         }}
       >
         {name + "'s Course Insights"}
@@ -376,11 +393,11 @@ const CourseStat = props => {
           className="w-100 vh-50"
           style={{
             backgroundColor: "rgb(255,255,255)",
-            marginTop: "1%"
+            marginTop: "1%",
           }}
         >
           <div className="center w-70 flex justify-around flex-wrap-ns">
-            {stats.map(stat => {
+            {stats.map((stat) => {
               return (
                 <StatNumber key={stat.id} className="center" stat={stat} />
               );
@@ -391,7 +408,7 @@ const CourseStat = props => {
       <div
         className="vh-50-ns w-100"
         style={{
-          backgroundColor: "rgb(0,0,0,0.03)"
+          backgroundColor: "rgb(0,0,0,0.03)",
         }}
       >
         <div className="flex justify-around center">
@@ -405,19 +422,19 @@ const CourseStat = props => {
               backgroundColor: "transparent",
               cursor: "pointer",
               color: "#faa551",
-              outline: "none"
+              outline: "none",
             }}
           ></button>
           <div
             className="mt3 w-40"
             style={{
-              backgroundColor: "rgb(255,255,255)"
+              backgroundColor: "rgb(255,255,255)",
             }}
           >
             <StatChart
               chartData={currentChart}
               type={currentChart.chartType}
-              colors={currentChart.labels.map(label => {
+              colors={currentChart.labels.map((label) => {
                 return "#7f7aea";
               })}
             />
@@ -432,7 +449,7 @@ const CourseStat = props => {
               backgroundColor: "transparent",
               cursor: "pointer",
               color: "#faa551",
-              outline: "none"
+              outline: "none",
             }}
           ></button>
         </div>
