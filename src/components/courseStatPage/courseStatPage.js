@@ -345,14 +345,7 @@ const CourseStat = (props) => {
     });
   };
 
-  let {
-    sessions,
-    chartsData,
-    currentChartIndx,
-    stats,
-    currentSessionId,
-    currentChart,
-  } = state;
+  let { sessions, chartsData, stats, currentSessionId, currentChart } = state;
   console.log(sessions);
   return (
     <div
