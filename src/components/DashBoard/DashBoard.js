@@ -6,15 +6,15 @@ const DashBoard = ({
   attendees,
   onAttendeeAdd,
   onAttendeeUpdate,
-  onAttendeeDelete
+  onAttendeeDelete,
 }) => {
   const [state] = React.useState({
     columns: [
-      { title: "Name", field: "name" },
+      { title: "First Name", field: "name" },
       { title: "ID", field: "id", type: "numeric" },
-      { title: "FR Score", field: "FRScore", type: "numeric" }
+      { title: "FR Score", field: "FRScore", type: "numeric" },
     ],
-    listening: false
+    listening: false,
   });
 
   return (
@@ -23,10 +23,10 @@ const DashBoard = ({
         <MaterialTable
           style={{
             color: "#7f7aea",
-            fontFamily: ["Cairo", "sans-serif"]
+            fontFamily: ["Cairo", "sans-serif"],
           }}
           pagination={{
-            color: "#7f7aea"
+            color: "#7f7aea",
           }}
           title="Attendees"
           columns={state.columns}
@@ -34,35 +34,35 @@ const DashBoard = ({
           options={{
             headerStyle: {
               color: "#7f7aea",
-              fontFamily: ["Cairo", "sans-serif"]
+              fontFamily: ["Cairo", "sans-serif"],
             },
             actionsCellStyle: {
               color: "#7f7aea",
-              fontFamily: ["Cairo", "sans-serif"]
-            }
+              fontFamily: ["Cairo", "sans-serif"],
+            },
           }}
           editable={{
-            onRowAdd: newAttendee =>
-              new Promise(resolve => {
+            onRowAdd: (newAttendee) =>
+              new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
                   onAttendeeAdd(newAttendee);
                 }, 600);
               }),
             onRowUpdate: (updatedAttendee, attendees) =>
-              new Promise(resolve => {
+              new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
                   onAttendeeUpdate(updatedAttendee, attendees.tableData.id);
                 }, 600);
               }),
-            onRowDelete: attendee =>
-              new Promise(resolve => {
+            onRowDelete: (attendee) =>
+              new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
                   onAttendeeDelete(attendee);
                 }, 600);
-              })
+              }),
           }}
         />
       </Grid>
