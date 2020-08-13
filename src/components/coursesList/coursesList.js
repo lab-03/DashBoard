@@ -13,22 +13,22 @@ import {
   DialogTitle,
   Checkbox,
   FormControlLabel,
-  TextField
+  TextField,
 } from "@material-ui/core";
 
 var axios = require("axios");
-const Courses = props => {
+const Courses = (props) => {
   const [state, setState] = useState({
     courses: [],
     longitude: null,
     latitude: null,
     newCourse: {
       name: "",
-      id: ""
+      id: "",
     },
     checked: false,
     openDialog: false,
-    getCourses: true
+    getCourses: true,
   });
   const addCourse = async (courseName, courseID) => {
     var courseData = { name: courseName, code: courseID };
@@ -43,14 +43,14 @@ const Courses = props => {
         client: localStorage.getItem("client"),
         uid: localStorage.getItem("uid"),
         "token-type": localStorage.getItem("tokenType"),
-        expiry: localStorage.getItem("expiry")
+        expiry: localStorage.getItem("expiry"),
       },
-      data: JSON.stringify(data)
+      data: JSON.stringify(data),
     };
 
     //handleClose();
     console.log(data);
-    await axios(config).then(response => {
+    await axios(config).then((response) => {
       console.log("course added successfuly");
       fetch("https://a-tracker.herokuapp.com/courses", {
         method: "get",
@@ -60,23 +60,23 @@ const Courses = props => {
           client: localStorage.getItem("client"),
           uid: localStorage.getItem("uid"),
           "token-type": localStorage.getItem("tokenType"),
-          expiry: localStorage.getItem("expiry")
-        }
+          expiry: localStorage.getItem("expiry"),
+        },
       })
-        .then(response => response.json())
-        .then(response => {
+        .then((response) => response.json())
+        .then((response) => {
           setState({
             ...state,
             courses: response,
             getCourses: false,
             openDialog: false,
-            newCourse: { name: "", id: "" }
+            newCourse: { name: "", id: "" },
           });
           console.log("fetched");
         });
     });
   };
-  const getLocation = e => {
+  const getLocation = (e) => {
     let location = null,
       latitude = null,
       longitude = null;
@@ -84,12 +84,18 @@ const Courses = props => {
       location = window.navigator.geolocation;
     }
     if (location) {
-      location.getCurrentPosition(function(position) {
-        longitude = position.coords.longitude;
-        latitude = position.coords.latitude;
-        console.log({ latitude, longitude });
-        setState({ ...state, longitude, latitude });
-      });
+      location.getCurrentPosition(
+        function (position) {
+          longitude = position.coords.longitude;
+          latitude = position.coords.latitude;
+          console.log({ latitude, longitude });
+          setState({ ...state, longitude, latitude });
+        },
+        (err) => {
+          console.log(err);
+        },
+        { enableHighAccuracy: true }
+      );
     }
   };
 
@@ -104,18 +110,18 @@ const Courses = props => {
           client: localStorage.getItem("client"),
           uid: localStorage.getItem("uid"),
           "token-type": localStorage.getItem("tokenType"),
-          expiry: localStorage.getItem("expiry")
-        }
+          expiry: localStorage.getItem("expiry"),
+        },
       })
-        .then(response => response.json())
-        .then(response => {
+        .then((response) => response.json())
+        .then((response) => {
           setState({ ...state, courses: response, getCourses: false });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
     if (!latitude || !longitude) getLocation();
   });
-  const createQrCode = id => {
+  const createQrCode = (id) => {
     const { longitude, latitude, checked } = state;
     const { history } = props;
 
@@ -132,7 +138,7 @@ const Courses = props => {
           client: localStorage.getItem("client"),
           uid: localStorage.getItem("uid"),
           "token-type": localStorage.getItem("tokenType"),
-          expiry: localStorage.getItem("expiry")
+          expiry: localStorage.getItem("expiry"),
         },
         body: JSON.stringify({
           session: {
@@ -140,29 +146,29 @@ const Courses = props => {
             classable_type: "Course",
             apply_checks: !checked,
             long: longitude,
-            lat: latitude
-          }
-        })
+            lat: latitude,
+          },
+        }),
       })
-        .then(response => {
+        .then((response) => {
           if (response.ok) {
             return response.json();
           } else {
             throw Error(response.statusText);
           }
         })
-        .then(response => {
+        .then((response) => {
           let re = new RegExp("/", "g");
           let imageUrl = response.qr_code_base64.replace(re, "%2f");
           let hash = response.token;
           history.push(`/home/qr/${id}/${imageUrl}/${hash}`);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
   };
-  const handleCheckboxClick = event => {
+  const handleCheckboxClick = (event) => {
     setState({ ...state, checked: !checked });
   };
   const handleClickOpen = () => {
@@ -172,7 +178,7 @@ const Courses = props => {
     setState({
       ...state,
       openDialog: false,
-      newCourse: { name: "", id: "" }
+      newCourse: { name: "", id: "" },
     });
   };
   const handleSubmit = () => {
@@ -180,7 +186,7 @@ const Courses = props => {
     if (!newCourse.name || !newCourse.id) {
       alert("You must enter a course name and a course id");
     } else {
-      let check = courses.filter(course => {
+      let check = courses.filter((course) => {
         return course.id === newCourse.id;
       });
       if (check.length) {
@@ -197,7 +203,7 @@ const Courses = props => {
       }
     }
   };
-  const newCourseHandler = e => {
+  const newCourseHandler = (e) => {
     let target = e.target.name; //name or id to be updated
     let prev = state.newCourse; // prev newCourse
     prev[target] = e.target.value; // update the name or the id depending on which has been updated
@@ -222,7 +228,7 @@ const Courses = props => {
               style={{
                 color: "#7f7aea",
                 fontFamily: ["Cairo", "sans-serif"],
-                marginLeft: "180px"
+                marginLeft: "180px",
               }}
               onChange={handleCheckboxClick}
             />
@@ -232,7 +238,7 @@ const Courses = props => {
           <Grid item xs={12} md={11}>
             <div className="ml5">
               <List>
-                {courses.map(course => {
+                {courses.map((course) => {
                   return (
                     <Course
                       key={course.id}
@@ -254,13 +260,13 @@ const Courses = props => {
                   background: "#faa551",
                   borderRadius: "0px",
                   width: "10%",
-                  textTransform: "none"
+                  textTransform: "none",
                 }}
               >
                 <p
                   className=""
                   style={{
-                    fontSize: "120%"
+                    fontSize: "120%",
                   }}
                 >
                   Add Course
@@ -291,7 +297,7 @@ const Courses = props => {
                 required
                 fullWidth
                 InputLabelProps={{
-                  shrink: true
+                  shrink: true,
                 }}
                 onChange={newCourseHandler}
               />
@@ -303,7 +309,7 @@ const Courses = props => {
                 value={newCourse.id}
                 fullWidth
                 InputLabelProps={{
-                  shrink: true
+                  shrink: true,
                 }}
                 required
                 onChange={newCourseHandler}
