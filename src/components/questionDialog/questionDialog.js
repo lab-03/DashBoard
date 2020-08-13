@@ -50,7 +50,7 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
         console.log("permission granted");
         const token = await messaging.getToken();
         console.log(token);
-        sendTokenToServer(token);
+        // sendTokenToServer(token);
         return token;
       })
       .catch(function (err) {
@@ -59,19 +59,9 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
     messaging.onMessage((payload) =>
       console.log("Message received. ", payload)
     );
-    navigator.serviceWorker.addEventListener("message", (message) => {
-      // console.log(message);
-      // console.log(
-      //   message.data["firebase-messaging-msg-data"].data.choice_num
-      // );
-      let answerNumber =
-        message.data["firebase-messaging-msg-data"].data.choice_num;
-      let { chartData } = state;
-      chartData[answerNumber - 1] += 1;
-      console.log(message, chartData);
-      setState({ ...state, showChart: true, chartData });
-    });
+
     console.log({ messaging });
+    return messaging;
   };
   const sendTokenToServer = (token) => {
     fetch("https://a-tracker.herokuapp.com/users/add_device_token", {
@@ -187,13 +177,26 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
         correctAnswer: null,
       },
     });
-    setState({ ...state, showChart: false });
+    setState({ ...state, showChart: false, chartData: [0, 0, 0] });
     state.handleClose();
   };
 
   useEffect(() => {
     if (!firebase.apps.length) {
       initFcm();
+      navigator.serviceWorker.addEventListener("message", (message) => {
+        // console.log(message);
+        // console.log(
+        //   message.data["firebase-messaging-msg-data"].data.choice_num
+        // );
+        let answerNumber =
+          message.data["firebase-messaging-msg-data"].data.choice_num;
+        let { chartData } = state;
+        chartData[answerNumber - 1] += 1;
+        console.log(message, chartData);
+        setState({ ...state, showChart: false });
+        setState({ ...state, showChart: true, chartData });
+      });
     }
   });
 
