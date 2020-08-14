@@ -93,23 +93,20 @@ const QrCode = (props) => {
       .on("disconnect", () => {
         console.log("socket disconnected");
       });
-    fetch(
-      `https://a-tracker.herokuapp.com/sessions/${hash}/add_to_attendance`,
-      {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "access-token": localStorage.getItem("accessToken"),
-          client: localStorage.getItem("client"),
-          uid: localStorage.getItem("uid"),
-          "token-type": localStorage.getItem("tokenType"),
-          expiry: localStorage.getItem("expiry"),
-        },
-        body: JSON.stringify({
-          student_id: newAttendee.id,
-        }),
-      }
-    )
+    fetch(`https://a-tracker.herokuapp.com/sessions/${hash}/add_attendance`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "access-token": localStorage.getItem("accessToken"),
+        client: localStorage.getItem("client"),
+        uid: localStorage.getItem("uid"),
+        "token-type": localStorage.getItem("tokenType"),
+        expiry: localStorage.getItem("expiry"),
+      },
+      body: JSON.stringify({
+        student_id: newAttendee.id,
+      }),
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
