@@ -217,9 +217,16 @@ const QrCode = (props) => {
       const attendees = [...prevState.attendees];
       return { ...prevState, attendees, hide: true };
     });
-    fetch("https://gp-verifier.herokuapp.com/api/qrcodes/end", {
-      method: "put",
-      headers: { "Content-Type": "application/json" },
+    fetch(`https://a-tracker.herokuapp.com/sessions/${hash}/end`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "access-token": localStorage.getItem("accessToken"),
+        client: localStorage.getItem("client"),
+        uid: localStorage.getItem("uid"),
+        "token-type": localStorage.getItem("tokenType"),
+        expiry: localStorage.getItem("expiry"),
+      },
       body: JSON.stringify({
         hash,
       }),
