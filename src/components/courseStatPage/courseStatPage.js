@@ -155,7 +155,7 @@ const CourseStat = (props) => {
 
           stats[0].value = sessions[0].attendance.attended_students;
           stats[1].value = sessions[0].interactive_quizzes.length;
-          if (sessions[0].interactive_quizzes.length !== 0) {
+          if (sessions[0].interactive_quizzes.length !== 0 && stats[0].value) {
             stats[2].value = sessions[0].interactive_quizzes[0].total_students;
             stats[3].value =
               (sessions[0].interactive_quizzes[0].total_students /
@@ -247,7 +247,7 @@ const CourseStat = (props) => {
     stats[0].value = session[0].attendance.attended_students;
     stats[1].value = session[0].interactive_quizzes.length;
 
-    if (session[0].interactive_quizzes.length !== 0) {
+    if (session[0].interactive_quizzes.length !== 0 && stats[0].value) {
       stats[2].value = session[0].interactive_quizzes[0].total_students;
       if (stats[0].value !== "NR")
         stats[3].value =
