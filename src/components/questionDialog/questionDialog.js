@@ -50,7 +50,7 @@ const QuestionDialog = ({ handleClose, openDialog, hash }) => {
         console.log("permission granted");
         const token = await messaging.getToken();
         console.log(token);
-        // sendTokenToServer(token);
+        sendTokenToServer(token);
         return token;
       })
       .catch(function (err) {
