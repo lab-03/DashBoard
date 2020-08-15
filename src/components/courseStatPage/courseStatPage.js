@@ -158,15 +158,15 @@ const CourseStat = (props) => {
           if (sessions[0].interactive_quizzes.length !== 0) {
             stats[2].value = sessions[0].interactive_quizzes[0].total_students;
             stats[3].value =
-              (stats[0].value *
-                sessions[0].interactive_quizzes[0].total_students) /
+              (sessions[0].interactive_quizzes[0].total_students /
+                stats[0].value) *
                 100 +
               "%";
             stats[4].value =
               sessions[0].interactive_quizzes[0].total_right_answers;
             stats[5].value =
-              (sessions[0].interactive_quizzes[0].total_students *
-                stats[4].value) /
+              (stats[4].value /
+                sessions[0].interactive_quizzes[0].total_students) *
                 100 +
               "%";
 
@@ -251,12 +251,12 @@ const CourseStat = (props) => {
       stats[2].value = session[0].interactive_quizzes[0].total_students;
       if (stats[0].value !== "NR")
         stats[3].value =
-          (stats[0].value * session[0].interactive_quizzes[0].total_students) /
+          (session[0].interactive_quizzes[0].total_students / stats[0].value) *
           100;
       stats[4].value = session[0].interactive_quizzes[0].total_right_answers;
       if (stats[4].value !== "NR")
         stats[5].value =
-          (session[0].interactive_quizzes[0].total_students * stats[4].value) /
+          (stats[4].value / session[0].interactive_quizzes[0].total_students) *
           100;
 
       while (chartsData.length > 3) chartsData.pop();

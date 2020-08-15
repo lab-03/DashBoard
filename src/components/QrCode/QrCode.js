@@ -211,12 +211,7 @@ const QrCode = (props) => {
         console.log(err);
       });
   };
-
-  const endQrCode = (hash) => {
-    setState((prevState) => {
-      const attendees = [...prevState.attendees];
-      return { ...prevState, attendees, hide: true };
-    });
+  const handleSubmit = () => {
     fetch(`https://a-tracker.herokuapp.com/sessions/${hash}/end`, {
       method: "post",
       headers: {
@@ -234,6 +229,29 @@ const QrCode = (props) => {
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
+      })
+      .catch((err) => console.log(err));
+    let { socket } = state;
+    console.log(`disconnecting socket ${socket.id}`);
+    socket.disconnect();
+    setState({ ...state, listening: -1 });
+    return props.history.push("/home");
+  };
+  const endQrCode = (hash) => {
+    setState((prevState) => {
+      const attendees = [...prevState.attendees];
+      return { ...prevState, attendees, hide: true };
+    });
+    fetch("https://gp-verifier.herokuapp.com/api/qrcodes/end", {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        hash,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setState({ ...state, hide: true });
       })
       .catch((err) => console.log(err));
   };
@@ -290,13 +308,7 @@ const QrCode = (props) => {
                         fontFamily: ["Cairo", "sans-serif"],
                         textTransform: "none",
                       }}
-                      onClick={() => {
-                        let { socket } = state;
-                        console.log(`disconnecting socket ${socket.id}`);
-                        socket.disconnect();
-                        setState({ ...state, listening: -1 });
-                        return props.history.push("/home");
-                      }}
+                      onClick={handleSubmit}
                     >
                       <p
                         className="pl2 pr2"
